@@ -12,9 +12,9 @@ var $$ = Dom7;
 var mainView = myApp.addView('.view-main', {
 });
 // Add another view, which is in right panel
-var rightView = myApp.addView('.view-right', {
+/*var rightView = myApp.addView('.view-right', {
     name: 'right'
-});
+});*/
 
 // Show/hide preloader for remote ajax loaded pages
 // Probably should be removed on a production/local app
