@@ -6,7 +6,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="theme-color" content="#2196f3">
+    <meta name="theme-color" content="#000000">
     <title>Framework7 Material</title>
     <link rel="stylesheet" href="css/framework7.material.css">
     <link rel="stylesheet" href="css/framework7.material.colors.css">
@@ -14,6 +14,18 @@
     <link rel="stylesheet" href="css/material-icons.css">
     <link rel="stylesheet" href="css/kitchen-sink.css">
     <link rel="icon" href="img/icon.png">
+    <script type="text/javascript" src="js/localforage.min.js"></script>
+    <script>
+        localforage.setItem('app', 'codenamezeta', function (err) {
+            localforage.getItem('app', function (err, value) {
+                if (value == 'codenamezeta')
+                {
+                    localforage.setItem('developers', 'hexaxle', function (err) {
+                    });
+                }
+            });
+        });
+    </script>
   </head>
   <body class="theme-black">
     <div class="statusbar-overlay"></div>
@@ -48,5 +60,6 @@
     <script type="text/javascript" data-main="scripts/startup" src="lib/require.2.1.8.js" async></script>
     <script type="text/javascript" src="js/framework7.js"></script>
     <script type="text/javascript" src="js/kitchen-sink.js"></script>
+    <script type="text/javascript" src="js/my-app.js"></script>
   </body>
 </html>
