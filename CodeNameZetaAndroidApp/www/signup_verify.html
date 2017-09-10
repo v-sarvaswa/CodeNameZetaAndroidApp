@@ -1,0 +1,78 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="theme-color" content="#000000">
+    <title>Framework7 Material</title>
+    <link rel="stylesheet" href="css/framework7.material.css">
+    <link rel="stylesheet" href="css/framework7.material.colors.css">
+    <link href="http://fonts.googleapis.com/css?family=Roboto:400,300,500,700" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="css/material-icons.css">
+    <link rel="stylesheet" href="css/kitchen-sink.css">
+    <link rel="icon" href="img/icon.png">
+    <script type="text/javascript" src="js/localforage.min.js"></script>
+    <script>
+        
+    </script>
+</head>
+<body class="theme-black">
+    <div class="statusbar-overlay"></div>
+    <div class="panel-overlay"></div>
+
+    <div class="views">
+        <div class="view view-main">
+            <div class="pages navbar-fixed">
+                <div data-page="swiper-horizontal" class="page">
+                    <div data-page="form-elements" class="page">
+                        <div class="navbar">
+                            <div class="navbar-inner">
+                                <div class="center">Zeta</div>
+                            </div>
+                        </div>
+                        <div class="page-content" style="text-align:center;">
+                            <div class="content-block-title" style="padding: 0px;font-weight:800;font-size: 22px;overflow: visible;text-align: center;">Verify Its You!</div>
+                            <img src="img/email.png" style="margin:auto; width: 40%;"/>
+                            <p style="text-align:justify; padding: 15px;font-size: 18px;margin: 0;">
+                                Just to make sure it's really you, we've sent you an e-mail with a passcode to enter.
+                            </p>
+                            <p style="text-align:center; font-size:18px; font-weight:600; margin: 0;">
+                                Don't worry, it's super easy!
+                            </p>
+                            <form class="list-block inset inputs-list" style="margin-bottom: 12px; margin-top: 5px;">
+                                <ul>
+                                    <li>
+                                        <div class="item-content">
+                                            <div class="item-inner">
+                                                <div class="item-input item-input-field" style="width: 50%; margin: auto;">
+                                                    <input type="password" placeholder="4 Digit Passcode" class="" maxlength="4" style="font-size:20px; text-align: center; margin: auto;" autofocus>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                                <div class="content-block center" style="margin: 20px 0;">
+                                    <a href="#" class="button button-fill button-raised color-black center" style="width:50%; margin:auto;">Authenticate</a>
+                                    <br/><br />
+                                    <span style="vertical-align:middle; font-size:18px;">Haven't received yet? </span><a href="#" class="external center" style="margin: 10px auto; color: #000000;text-decoration:underline; vertical-align:middle; font-size:18px; font-weight:800; line-height: 19px;">Re-send</a>
+                                </div>
+                            </form>
+                           
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" data-main="scripts/startup" src="lib/require.2.1.8.js" async></script>
+    <script type="text/javascript" src="js/framework7.js"></script>
+    <script type="text/javascript" src="js/kitchen-sink.js"></script>
+    <script type="text/javascript" src="js/my-app.js"></script>
+</body>
+</html>
