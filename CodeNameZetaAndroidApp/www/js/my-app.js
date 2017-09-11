@@ -10,6 +10,40 @@ var mainView = myApp.addView('.view-main', {
     dynamicNavbar: true
 });
 
+myApp.onPageInit('notifications', function (page) {
+    $$('.ks-notification-1').on('click', function () {
+        myApp.addNotification({
+            message: 'Simple message'
+        });
+    });
+    $$('.ks-notification-2').on('click', function () {
+        myApp.addNotification({
+            message: 'Multi-line message. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc in magna nisi.',
+        });
+    });
+    $$('.ks-notification-3').on('click', function () {
+        myApp.addNotification({
+            message: 'Nice yellow button',
+            button: {
+                text: 'Click me',
+                color: 'yellow'
+            }
+        });
+    });
+    $$('.ks-notification-4').on('click', function () {
+        myApp.addNotification({
+            message: 'Close me to see Alert',
+            button: {
+                text: 'Close',
+                color: 'lightgreen'
+            },
+            onClose: function () {
+                myApp.alert('Notification closed');
+            }
+        });
+    });
+});
+
 myApp.onPageInit('swiper-horizontal', function (page) {
     alert("hello");
 });

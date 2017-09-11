@@ -1,4 +1,4 @@
-
+﻿
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="css/kitchen-sink.css">
     <link rel="icon" href="img/icon.png">
     <script type="text/javascript" src="js/localforage.min.js"></script>
+    <script type="text/javascript" src="js/Synapse.js"></script>
+    <script type="text/javascript" src="js/jquery-1.12.0.min.js"></script>
     <script>
         localforage.setItem('app', 'codenamezeta', function (err) {
             localforage.getItem('app', function (err, value) {
@@ -25,6 +27,129 @@
                     });
                 }
             });
+        });
+
+        $(document).ready(function () {
+            //E-Mail Validation
+            function isEmail(email) {
+                var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                return regex.test(email);
+            }
+
+            $("#btnSignUP").click(function () {
+
+                var validationCount = 0;
+
+                //E-Mail
+                if ($.trim($("#userEmail").val()).length > 0)
+                {
+                    if (isEmail($("#userEmail").val()))
+                    {
+                        validationCount++;//////////////////////////////////count = 1
+                        $("#userEmail").removeAttr('style');
+                        $('#userEmail').removeProp('style');
+                    }
+                    else
+                    {
+                        //alert("inside button click");
+                        $('#userEmail').css('border-color', 'red');
+                    }
+                }
+                else
+                {
+                    $('#userEmail').css('border-color', '#d52b1e');
+                }
+
+                //Password = Re-Password
+                if (($.trim($("#userPassword").val()).length >= 6) && ($.trim($("#userConfirmPassword").val()).length >= 6))
+                {
+                    if ($("#userPassword").val() == $("#userConfirmPassword").val())
+                    {
+                        validationCount++;///////////////////////////////count = 2
+                        $("#userPassword").removeAttr('style');
+                        $('#userPassword').removeProp('style');
+                        $("#userConfirmPassword").removeAttr('style');
+                        $('#userConfirmPassword').removeProp('style');
+                    }
+                    else
+                    {
+                        $('#userPassword').css('border-color', '#d52b1e');
+                        $('#userConfirmPassword').css('border-color', '#d52b1e');
+                    }
+                }
+                else
+                {
+                    $('#userPassword').css('border-color', '#d52b1e');
+                    $('#userConfirmPassword').css('border-color', '#d52b1e');
+                }
+
+                //Name
+                if ($.trim($("#userName").val()).length > 1)
+                {
+                    validationCount++;////////////////////////////////////count = 3
+                    $("#userName").removeAttr('style');
+                    $('#userName').removeProp('style');
+                }
+                else
+                {
+                    $('#userName').css('border-color', '#d52b1e');
+                }
+
+                if (validationCount == 3)
+                {
+                    var name = $("#userName").val();
+                    var email = $("#userEmail").val();
+                    var password = $("#userPassword").val();
+                    var confirmPassword = $("#userConfirmPassword").val();
+                    var loginType = "Normal";
+
+                    var parameters = [];
+                    parameters.push(name);
+                    parameters.push(email);
+                    parameters.push(password);
+                    parameters.push(loginType);
+                    
+                    var res = user_ajax("user_register", "endUser", parameters);
+
+                    //Actions
+                    if (res.indexOf("success") >= 0) {
+                        //$.mobile.loading( "hide" );
+                        var user_id = res.replace('success', '');
+                        var dest = "index.html";///////////////////////////////////////////
+                        var param = $.query.set("user_id", user_id).set("email", email).toString();
+                        window.location.href = dest + param;
+                    }
+                    if (res == "invalid name") {
+                        //$.mobile.loading( "hide" );
+                        
+                    }
+                    if (res == "invalid password") {
+                        //$.mobile.loading( "hide" );
+                        
+                    }
+                    if (res == "e-mail id exists") {
+                        //$.mobile.loading( "hide" );
+                        
+                        
+                    }
+                    if (res == "invalid email address") {
+                        //$.mobile.loading( "hide" );
+                        
+                    }
+                    if (res == "fail") {
+                        //$.mobile.loading( "hide" );
+                        
+                    }
+                    if (res == "invalid e-mail id") {
+                        //$.mobile.loading( "hide" );
+                       
+                    }
+                    if (res == "required fields cannot be empty") {
+                        //$.mobile.loading( "hide" );
+                        
+                    }
+                }
+            }); 
         });
     </script>
     <style type="text/css">
@@ -124,7 +249,7 @@
                                             <div class="item-inner">
                                                 <div class="item-title floating-label">Your name</div>
                                                 <div class="item-input">
-                                                    <input type="text" placeholder="" />
+                                                    <input type="text" id="userName" name="userName" placeholder="" />
                                                 </div>
                                             </div>
                                         </div>
@@ -135,7 +260,7 @@
                                             <div class="item-inner">
                                                 <div class="item-title floating-label">E-mail</div>
                                                 <div class="item-input">
-                                                    <input type="email" placeholder="" />
+                                                    <input type="email" id="userEmail" name="userEmail" placeholder="" />
                                                 </div>
                                             </div>
                                         </div>
@@ -147,7 +272,7 @@
                                             <div class="item-inner">
                                                 <div class="item-title floating-label">Password</div>
                                                 <div class="item-input">
-                                                    <input type="password" placeholder="" />
+                                                    <input type="password" id="userPassword" name="userPassword" placeholder="" />
                                                 </div>
                                             </div>
                                         </div>
@@ -159,7 +284,7 @@
                                             <div class="item-inner">
                                                 <div class="item-title floating-label">Confirm Password</div>
                                                 <div class="item-input">
-                                                    <input type="password" placeholder="" />
+                                                    <input type="password" id="userConfirmPassword" name="userConfirmPassword" placeholder="" />
                                                 </div>
                                             </div>
                                         </div>
@@ -167,7 +292,7 @@
                                 </ul>
 
                                 <div class="content-block center" style="margin: 20px 0;">
-                                        <a href="#" class="button button-fill button-raised color-black center" style="width:50%; margin:auto;">Sign me up!</a>
+                                        <a href="#" class="button button-fill button-raised color-black center" id="btnSignUP" name="btnSignUP" style="width:50%; margin:auto;">Sign me up!</a>
                                 </div>
                             </form>
                            
