@@ -1,0 +1,206 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="theme-color" content="#000000">
+    <title>Framework7 Material</title>
+    <link rel="stylesheet" href="css/framework7.material.css">
+    <link rel="stylesheet" href="css/framework7.material.colors.css">
+    <link href="http://fonts.googleapis.com/css?family=Roboto:400,300,500,700" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="css/material-icons.css">
+    <link rel="stylesheet" href="css/kitchen-sink.css">
+    <link rel="icon" href="img/icon.png">
+    <script type="text/javascript" src="js/localforage.min.js"></script>
+    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+    <script>
+        
+    </script>
+</head>
+<body class="theme-black">
+    <div class="statusbar-overlay"></div>
+    <div class="panel-overlay"></div>
+
+    <div class="views">
+        <div class="view view-main">
+            <div class="pages navbar-fixed">
+                    <div data-page="signup_stage_2" class="page">
+                        <div class="navbar">
+                            <div class="navbar-inner">
+                                <div class="center">Zeta</div>
+                            </div>
+                        </div>
+                        <div class="page-content" style="text-align:center;">
+                            <div class="content-block-title" style="padding: 0px;font-weight:800;font-size: 22px;overflow: visible;text-align: center;">Help Us Know You Better!</div>
+                            
+                            <div class="content-block-title" style="text-align:left;font-weight:800;font-size: 16px;margin:0px;padding:10px 20px 5px 20px;">What is your gender?</div>
+
+                            <script>
+                                $(document).ready(function () {
+                                    
+                                    var maleSelected = false;
+                                    var femaleSelected = false;
+                                    var otherSelected = false;
+
+                                    jQuery(function ($) {
+                                        
+                                        $('path').click(function () {
+                                            var block = $(this).attr('id');
+                                            if (block == 'malebox') {
+                                                if (maleSelected == false) {
+                                                    maleSelected = true;
+                                                    femaleSelected = false;
+                                                    otherSelected = false;
+                                                    $('#selectedmalebox').attr('fill', 'black');
+                                                    $(this).attr('fill', 'url(#maleblockinv)');
+                                                    $('#selectedfemalebox').attr('fill', 'transparent');
+                                                    $('#femalebox').attr('fill', 'url(#femaleblock)');
+                                                    $('#selectedothersbox').attr('fill', 'transparent');
+                                                    $('#othersbox').attr('fill', 'url(#othersblock)');
+                                                }
+                                                else {
+                                                    maleSelected = false;
+                                                    $('#selectedmalebox').attr('fill', 'transparent');
+                                                    $(this).attr('fill', 'url(#maleblock)');
+                                                }
+                                            }
+                                            if (block == 'femalebox')
+                                            {
+                                                if (femaleSelected == false) {
+                                                    femaleSelected = true;
+                                                    otherSelected = false;
+                                                    maleSelected = false;
+                                                    $('#selectedfemalebox').attr('fill', 'black');
+                                                    $(this).attr('fill', 'url(#femaleblockinv)');
+                                                    $('#selectedmalebox').attr('fill', 'transparent');
+                                                    $('#malebox').attr('fill', 'url(#maleblock)');
+                                                    $('#selectedothersbox').attr('fill', 'transparent');
+                                                    $('#othersbox').attr('fill', 'url(#othersblock)');
+                                                }
+                                                else {
+                                                    femaleSelected = false;
+                                                    $('#selectedfemalebox').attr('fill', 'transparent');
+                                                    $(this).attr('fill', 'url(#femaleblock)');
+                                                }
+                                            }
+                                            if (block == 'othersbox') {
+                                                if (otherSelected == false) {
+                                                    otherSelected = true;
+                                                    maleSelected = false;
+                                                    femaleSelected = false;
+                                                    $('#selectedothersbox').attr('fill', 'black');
+                                                    $(this).attr('fill', 'url(#othersblockinv)');
+                                                    $('#selectedmalebox').attr('fill', 'transparent');
+                                                    $('#malebox').attr('fill', 'url(#maleblock)');
+                                                    $('#selectedfemalebox').attr('fill', 'transparent');
+                                                    $('#femalebox').attr('fill', 'url(#femaleblock)');
+                                                }
+                                                else {
+                                                    otherSelected = false;
+                                                    $('#selectedothersbox').attr('fill', 'transparent');
+                                                    $(this).attr('fill', 'url(#othersblock)');
+                                                }
+                                            }
+                                        });
+                                    });
+                                   
+                                });
+                            </script>
+
+
+                            <svg width="200" height="200" style="margin: -20px;">
+                                <defs>
+                                    <pattern id="maleblock" x="0" y="0" width="1" height="1">
+                                        <image width="70" height="200" xlink:href="img/gender_male.png" />
+                                    </pattern>
+                                    <pattern id="maleblockinv" x="0" y="0" width="1" height="1">
+                                        <image width="70" height="200" xlink:href="img/gender_male_inv.png" />
+                                    </pattern>
+
+                                    <pattern id="femaleblock" x="0" y="0" width="1" height="1">
+                                        <image width="140" height="153" xlink:href="img/gender_female.png" />
+                                    </pattern>
+                                    <pattern id="femaleblockinv" x="0" y="0" width="1" height="1">
+                                        <image width="140" height="153" xlink:href="img/gender_female_inv.png" />
+                                    </pattern>
+
+                                    <pattern id="othersblock" x="0" y="0" width="1" height="1">
+                                        <image width="200" height="105" xlink:href="img/gender_others.png" />
+                                    </pattern>
+                                    <pattern id="othersblockinv" x="0" y="0" width="1" height="1">
+                                        <image width="200" height="105" xlink:href="img/gender_others_inv.png" />
+                                    </pattern>
+                                </defs>
+
+                                <path fill="transparent" id="selectedmalebox" stroke="black" stroke-width="0" d="M -10,30 L 100,30 100,100 30,170 Z" />
+                                <path fill="transparent" id="selectedfemalebox" stroke="black" stroke-width="0" d="M 100,30 L 210,30 170,170 100,100 Z" style="z-index: 500;" />
+                                <path fill="transparent" id="selectedothersbox" stroke="black" stroke-width="0" d="M 100,100 L 170,170 150,200 50,200 30,170 100,100 Z" />
+
+                                <path fill="url(#maleblock)" id="malebox" stroke="black" stroke-width="0" d="M 0,0 L 100,0 100,100 0,200 Z" />
+                                <path fill="url(#femaleblock)" id="femalebox" stroke="black" stroke-width="0" d="M 100,0 L 200,0 200,200 100,100 Z" style="z-index: 1500;" />
+                                <path fill="url(#othersblock)" id="othersbox" stroke="black" stroke-width="0" d="M 100,100 L 200,200 0,200 100,100 Z" />
+
+                                <line x1="100" y1="30" x2="100" y2="100" style="stroke:rgb(0,0,0);stroke-width:3" />
+                                <line x1="100" y1="100" x2="30" y2="170" style="stroke:rgb(0,0,0);stroke-width:3" />
+                                <line x1="100" y1="100" x2="170" y2="170" style="stroke:rgb(0,0,0);stroke-width:3" />
+                            </svg>
+
+                            <div class="content-block-title" style="text-align:left;font-weight:800;font-size: 16px;margin:20px 0px 0px 0px;padding:20px 20px 0px 20px;">How old are you?</div>
+
+                            <div style="margin:0; display: none;" class="list-block">
+                                <ul>
+                                    <li>
+                                        <div class="item-content">
+                                            <div class="item-inner">
+                                                <div class="item-input">
+                                                    <input type="text" placeholder="Date Time" readonly="readonly" id="ks-picker-describe" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div id="ks-picker-date-container"></div>
+
+                            <div class="content-block center" style="margin: 10px 0;">
+                                <a href="#" class="button button-fill button-raised color-black center" style="width:50%; margin:auto;">Next</a>
+                            </div>
+                           
+                    </div>
+                </div>
+        </div>
+    </div>
+
+    
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" data-main="scripts/startup" src="lib/require.2.1.8.js" async></script>
+    <script type="text/javascript" src="js/framework7.js"></script>
+    <!--<script type="text/javascript" src="js/kitchen-sink.js"></script>-->
+    <script type="text/javascript" src="js/my-app.js"></script>
+        <script>
+            var today = new Date();
+
+            var pickerDescribe = myApp.picker({
+                input: '#ks-picker-describe',
+                container: '#ks-picker-date-container',
+                value: [today.getFullYear()-18],
+                rotateEffect: true,
+                toolbar: false,
+                cols: [
+                    {
+                        textAlign: 'left',
+                        values: (function () {
+                            var arr = [];
+                            for (var i = 1950; i <= today.getFullYear(); i++) { arr.push(i); }
+                            return arr;
+                        })(),
+                    },
+                ]
+                });
+        </script>
+</body>
+</html>
