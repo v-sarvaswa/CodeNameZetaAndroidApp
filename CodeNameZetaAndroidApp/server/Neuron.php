@@ -12,14 +12,21 @@
 	//Neuron Class
 	class neuron
 	{
+		private $sendresponse_url;
+
 		function __construct()
 		{
-		
+			$sendresponse_url = "return.php?data=";
 		}
 
-		function no_trigger_received
+		function no_trigger_received()
 		{
 			echo "No trigger received";
+		}
+		
+		function sendresponse($data)
+		{
+			Header("Location: $this->sendresponse_url".$data);
 		}
 	}
 	class enduser extends neuron
