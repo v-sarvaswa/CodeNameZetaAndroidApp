@@ -1,17 +1,24 @@
-/*--------------------------------Sign up------------------------------------------*/
-function user_ajax(method,user_type,parameters)
-{
-    var res = "";
+/************************************************************************
+Synapse v1.0
+
+************************************************************************/
+
+//AJAX Function
+function ajax(datatype, neuron, parameters, callback, error) {
+    var neuron = typeof neuron == 'string' ? neuron : Object.keys(neuron).map(
+        function (k) { return encodeURIComponent(k) + '=' + encodeURIComponent(neuron[k]) }
+    ).join('&');
+
+    var params = typeof parameters == 'string' ? parameters : Object.keys(parameters).map(
+        function (k) { return encodeURIComponent(k) + '=' + encodeURIComponent(parameters[k]) }
+    ).join('&');
+
     $.ajax({
-		type: "POST",
-        url: "http://technostan.com/Zeta/Neuron.php",
-        data: { "method": method, "user_type": user_type, "parameters": parameters }
-	  })
-		.done(function( msg ) {
-			res = $.trim(msg);
-		})
-		.fail(function() {
-            res = "Fail";
-        });
-    return res;
+        type: "POST",
+        dataType: datatype,
+        url: "http://technostan.com/zeta/neuron.php",
+        data: neuron + '&' + params,
+        success: callback,
+        error: error
+    })
 }
