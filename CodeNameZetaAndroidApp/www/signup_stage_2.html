@@ -8,7 +8,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="theme-color" content="#000000">
-    <title>Framework7 Material</title>
+    <title>Code Name Zeta</title>
     <link rel="stylesheet" href="css/framework7.material.css">
     <link rel="stylesheet" href="css/framework7.material.colors.css">
     <link href="http://fonts.googleapis.com/css?family=Roboto:400,300,500,700" rel="stylesheet" type="text/css">
@@ -17,6 +17,7 @@
     <link rel="icon" href="img/icon.png">
     <script type="text/javascript" src="js/localforage.min.js"></script>
     <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="js/synapse.js"></script>
     <script>
         
     </script>
@@ -35,7 +36,7 @@
                             </div>
                         </div>
                         <div class="page-content" style="text-align:center;">
-                            <div class="content-block-title" style="padding: 0px;font-weight:800;font-size: 22px;overflow: visible;text-align: center;">Help Us Know You Better!</div>
+                            <div class="content-block-title" style="padding: 0px;font-weight:800;font-size: 22px;overflow: visible;text-align: center;">Help us know you better!</div>
                             
                             <div class="content-block-title" style="text-align:left;font-weight:800;font-size: 16px;margin:0px;padding:10px 20px 5px 20px;">What is your gender?</div>
 
@@ -149,8 +150,9 @@
                                 <line x1="100" y1="100" x2="170" y2="170" style="stroke:rgb(0,0,0);stroke-width:3" />
                             </svg>
 
-                            <div class="content-block-title" style="text-align:left;font-weight:800;font-size: 16px;margin:20px 0px 0px 0px;padding:20px 20px 0px 20px;">How old are you?</div>
+                            <div class="content-block-title" style="text-align:left;font-weight:800;font-size: 16px;margin:20px 0px 0px 0px;padding:20px 20px 0px 20px;">What is your year of birth?</div>
 
+                           
                             <div style="margin:0; display: none;" class="list-block">
                                 <ul>
                                     <li>
@@ -164,10 +166,10 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div id="ks-picker-date-container"></div>
+                            <div id="ks-picker-date-container" style="width: 40%;margin: auto;"></div>
 
                             <div class="content-block center" style="margin: 10px 0;">
-                                <a href="#" class="button button-fill button-raised color-black center" style="width:50%; margin:auto;">Next</a>
+                                <a href="signup_stage_3.html" class="button button-fill button-raised color-black center external" style="width:50%; margin:auto;">Next</a>
                             </div>
                            
                     </div>
@@ -183,24 +185,22 @@
     <script type="text/javascript" src="js/my-app.js"></script>
         <script>
             var today = new Date();
-
+            var years="";
+            for (var i = 1950; i <= today.getFullYear(); i++) { years = years + " " + i.toString() + " " + ","; }
             var pickerDescribe = myApp.picker({
                 input: '#ks-picker-describe',
                 container: '#ks-picker-date-container',
-                value: [today.getFullYear()-18],
+                value: [' ' + (today.getFullYear() - 18).toString() +' '],
                 rotateEffect: true,
                 toolbar: false,
                 cols: [
                     {
-                        textAlign: 'left',
-                        values: (function () {
-                            var arr = [];
-                            for (var i = 1950; i <= today.getFullYear(); i++) { arr.push(i); }
-                            return arr;
-                        })(),
+                        textAlign: 'center',
+                        values: (years.split(',')),
                     },
                 ]
                 });
         </script>
+       
 </body>
 </html>

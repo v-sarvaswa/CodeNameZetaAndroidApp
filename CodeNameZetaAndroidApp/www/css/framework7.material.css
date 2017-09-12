@@ -7689,8 +7689,8 @@ body > .photo-browser .toolbar,
   align-items: center;
 }
 .picker-items-col-wrapper {
-  -webkit-transition-duration: 300ms;
-  transition-duration: 300ms;
+  -webkit-transition-duration: 200ms;
+  transition-duration: 200ms;
   -webkit-transition-timing-function: ease-out;
   transition-timing-function: ease-out;
 }
@@ -7706,14 +7706,15 @@ body > .photo-browser .toolbar,
   top: 0;
   width: 100%;
   box-sizing: border-box;
-  -webkit-transition-duration: 300ms;
-  transition-duration: 300ms;
+  -webkit-transition-duration: 200ms;
+  transition-duration: 200ms;
 }
 .picker-item span {
   padding: 0 10px;
 }
 .picker-items-col-absolute .picker-item {
-  position: absolute;
+    position: absolute;
+    width: -webkit-fill-available;
 }
 .picker-item.picker-item-far {
   pointer-events: none;

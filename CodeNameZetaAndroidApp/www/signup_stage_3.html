@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="theme-color" content="#000000">
+    <title>Code Name Zeta</title>
+    <link rel="stylesheet" href="css/framework7.material.css">
+    <link rel="stylesheet" href="css/framework7.material.colors.css">
+    <link href="http://fonts.googleapis.com/css?family=Roboto:400,300,500,700" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="css/material-icons.css">
+    <link rel="stylesheet" href="css/kitchen-sink.css">
+    <link rel="icon" href="img/icon.png">
+    <script type="text/javascript" src="js/localforage.min.js"></script>
+    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="js/synapse.js"></script>
+    <script>
+        /*
+        ajax('text', {trigger:'methodname', usertype:'admin/proposer/enduser/portal'}, { masterId: '14', c_pwd: 'sarvaswa' },
+            function (data){
+                res = $.trim(data);
+                alert(res);
+            },
+            function (xhr, errorType, error) {
+                console.log('Error Type: ' + errorType + ', Error: ' + error);
+            }
+        );
+       */
+    </script>
+</head>
+<body class="theme-black">
+    <div class="statusbar-overlay"></div>
+    <div class="panel-overlay"></div>
+
+    <div class="views">
+        <div class="view view-main">
+            <div class="pages navbar-fixed">
+                    <div data-page="signup_stage_3" class="page">
+                        <div class="navbar">
+                            <div class="navbar-inner">
+                                <div class="center">Zeta</div>
+                            </div>
+                        </div>
+                        <div class="page-content" style="text-align:center;">
+                            <div class="content-block-title" style="padding: 0px;font-weight:800;font-size: 22px;overflow: visible;text-align: center;">You are almost done!</div>
+                            
+                            <div class="content-block-title" style="text-align:left;font-weight:800;font-size: 16px;margin:0px;padding:10px 20px 5px 20px;">What describes you the best?</div>
+
+                            <div style="margin:0; display: none;" class="list-block">
+                                <ul>
+                                    <li>
+                                        <div class="item-content">
+                                            <div class="item-inner">
+                                                <div class="item-input">
+                                                    <input type="text" placeholder="Date Time" readonly="readonly" id="ks-picker-profession" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div id="ks-picker-profession-container" style="width: 60%;margin: auto;"></div>
+
+                            <div class="content-block-title" style="text-align:left;font-weight:800;font-size: 16px;margin:20px 0px 0px 0px;padding:0px 20px 0px 20px;">Which city do you live in?</div>
+
+                           
+
+                            <div class="content-block center" style="margin: 10px 0;">
+                                <a href="#" class="button button-fill button-raised color-black center" style="width:50%; margin:auto;">Next</a>
+                            </div>
+                           
+                    </div>
+                </div>
+        </div>
+    </div>
+
+    
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" data-main="scripts/startup" src="lib/require.2.1.8.js" async></script>
+    <script type="text/javascript" src="js/framework7.js"></script>
+    <!--<script type="text/javascript" src="js/kitchen-sink.js"></script>-->
+    <script type="text/javascript" src="js/my-app.js"></script>
+        <script>
+            var pickerDescribe = myApp.picker({
+                input: '#ks-picker-profession',
+                container: '#ks-picker-profession-container',
+                value: ['Researcher'],
+                rotateEffect: true,
+                toolbar: false,
+                cols: [
+                    {
+                        textAlign: 'center',
+                        values: ('Student,Professor,Young Professional,Researcher,Industry Expert,Author,Media Journalist'.split(',')),
+                    },
+                ]
+                });
+        </script>
+       
+</body>
+</html>
