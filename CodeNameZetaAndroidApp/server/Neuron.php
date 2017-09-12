@@ -3,7 +3,7 @@
 	require_once('config.php');
 	require_once('mail.php');
 
-	//Drop Point (Handle Requests from Synapse)
+	//Drop Point - Handle Requests from Synapse (Defaults to no_trigger_received & neuron)
 	$trigger = $_POST["trigger"] ?? 'no_trigger_received';
 	$usertype = $_POST["usertype"] ?? 'neuron';
 	$request_instance = new $usertype();
@@ -21,7 +21,7 @@
 
 		function no_trigger_received()
 		{
-			echo "No trigger received";
+			sendresponse('no_trigger_received');
 		}
 		
 		function sendresponse($data)
