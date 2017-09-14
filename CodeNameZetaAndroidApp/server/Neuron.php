@@ -102,6 +102,23 @@
 		{
             parent::__construct();
 		}
+
+		function register()
+		{
+			if(!empty($_POST))
+			{
+				$result = parent::callSPRead('e_registerUser',$_POST['name'],$_POST['email'],$_POST['password'],$_POST['loginType']);
+				while ($row = $result->fetch_object())
+				{
+					$res = $row->user_id;
+				}
+				parent::sendResponse($res);
+			}
+			else
+			{
+				parent::sendResponse('insufficient_data');
+			}
+		}
 	}
 
 	class admin extends neuron
