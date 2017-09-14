@@ -27,7 +27,8 @@
 
 		function no_trigger_received()
 		{
-			$this->sendResponse('no_trigger_received');
+			//$this->sendResponse('no_trigger_received');
+            $this->callSPIUD('together');
 		}
 
 		function sendResponse($data)
