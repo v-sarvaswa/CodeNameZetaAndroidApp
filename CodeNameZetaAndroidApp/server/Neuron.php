@@ -4,10 +4,10 @@
 	require_once('mail.php');
 
 	//Drop Point - Handle Requests from Synapse (Defaults to no_trigger_received & neuron)
-    $usertype = $_POST["usertype"] ?? 'neuron';
+    $userType = $_POST["usertype"] ?? 'neuron';
 	$trigger = $_POST["trigger"] ?? 'no_trigger_received';
-	$request_instance = new $usertype();
-	$request_instance->$trigger();
+	$requestInstance = new $userType();
+	$requestInstance->$trigger();
 
 	//Neuron Class
 	class neuron
@@ -27,7 +27,8 @@
 
 		function no_trigger_received()
 		{
-			sendResponse('no_trigger_received');
+			//$this->sendResponse('no_trigger_received');
+            $this->callSPIUD('together');
 		}
 
 		function sendResponse($data)
@@ -37,33 +38,61 @@
 
         function callSPIUD()
         {
-            $ct = func_num_args();
-            $param = '';
-            for ($i=1; $i<$ct; $i++)
+            try
             {
-                if($i==$ct-1)
-                    $param .= "'" . func_get_arg($i) . "'";
-                else
-                    $param .= "'" . func_get_arg($i) . "',";
+                $ct = func_num_args();
+                $param = '';
+                for ($i=1; $i<$ct; $i++)
+                {
+                    if($i==$ct-1)
+                        $param .= "'" . func_get_arg($i) . "'";
+                    else
+                        $param .= "'" . func_get_arg($i) . "',";
+                }
+                $qr = mysqli_query($this->conn,"CALL ". func_get_arg(0) . "($param)");
+                $this->conn->close();
+                return $qr;
             }
-            $qr = mysqli_query($this->conn,"CALL ". func_get_arg(0) . "($param)");
-            $this->conn->close();
-            return $qr;
+            catch (MySQLException $e)
+            {
+                $this->logError($GLOBALS['userType'],$GLOBALS['trigger'],$e->getMessage());
+            }
+            catch (Exception $e)
+            {
+                $this->logError($GLOBALS['userType'],$GLOBALS['trigger'],$e->getMessage());
+            }
         }
 
         function callSPRead()
         {
-            $ct = func_num_args();
-            $param = '';
-            for ($i=1; $i<$ct; $i++)
+            try
             {
-                if($i==$ct-1)
-                    $param .= "'" . func_get_arg($i) . "'";
-                else
-                    $param .= "'" . func_get_arg($i) . "',";
+                $ct = func_num_args();
+                $param = '';
+                for ($i=1; $i<$ct; $i++)
+                {
+                    if($i==$ct-1)
+                        $param .= "'" . func_get_arg($i) . "'";
+                    else
+                        $param .= "'" . func_get_arg($i) . "',";
+                }
+                $qr = $this->conn->query("CALL ". func_get_arg(0) . "($param)");
+                return $qr;
             }
-            $qr = $this->conn->query("CALL ". func_get_arg(0) . "($param)");
-            return $qr;
+            catch (MySQLException $e)
+            {
+                $this->logError($GLOBALS['userType'],$GLOBALS['trigger'],$e->getMessage());
+            }
+            catch (Exception $e)
+            {
+                $this->logError($GLOBALS['userType'],$GLOBALS['trigger'],$e->getMessage());
+            }
+        }
+
+        function logError($userType,$trigger,$errorDescription)
+        {
+            $result = $this->callSPIUD('sys_logError',$userType,$trigger,$errorDescription);
+            $this->sendResponse('server_error');
         }
 	}
 
@@ -72,22 +101,6 @@
 		public function __construct()
 		{
             parent::__construct();
-		}
-		function register()
-		{
-			if(!empty($_POST))
-			{
-				$result = parent::callSPRead('e_registerUser',$_POST['name'],$_POST['email'],$_POST['password'],$_POST['loginType']);
-				while ($row = $result->fetch_object())
-				{
-					$res = $row->user_id;
-				}
-				sendResponse($res);
-			}
-			else
-			{
-				sendResponse('insufficient_data');
-			}
 		}
 	}
 
