@@ -31,11 +31,6 @@
 
         $(document).ready(function () {
             //E-Mail Validation
-            function isEmail(email) {
-                var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-                return regex.test(email);
-            }
-
             $("#btnSignUP").click(function () {
 
                 var validationCount = 0;
@@ -46,13 +41,11 @@
                     if (isEmail($("#userEmail").val()))
                     {
                         validationCount++;//////////////////////////////////count = 1
-                        $("#userEmail").removeAttr('style');
-                        $('#userEmail').removeProp('style');
                     }
                     else
                     {
                         //alert("inside button click");
-                        $('#userEmail').css('border-color', 'red');
+                        alert("email");
                     }
                 }
                 else
@@ -66,33 +59,24 @@
                     if ($("#userPassword").val() == $("#userConfirmPassword").val())
                     {
                         validationCount++;///////////////////////////////count = 2
-                        $("#userPassword").removeAttr('style');
-                        $('#userPassword').removeProp('style');
-                        $("#userConfirmPassword").removeAttr('style');
-                        $('#userConfirmPassword').removeProp('style');
                     }
                     else
                     {
-                        $('#userPassword').css('border-color', '#d52b1e');
-                        $('#userConfirmPassword').css('border-color', '#d52b1e');
+                        alert("password");
                     }
                 }
                 else
                 {
-                    $('#userPassword').css('border-color', '#d52b1e');
-                    $('#userConfirmPassword').css('border-color', '#d52b1e');
                 }
 
                 //Name
                 if ($.trim($("#userName").val()).length > 1)
                 {
                     validationCount++;////////////////////////////////////count = 3
-                    $("#userName").removeAttr('style');
-                    $('#userName').removeProp('style');
                 }
                 else
                 {
-                    $('#userName').css('border-color', '#d52b1e');
+                    alert("name");
                 }
 
                 if (validationCount == 3)
@@ -100,54 +84,63 @@
                     var name = $("#userName").val();
                     var email = $("#userEmail").val();
                     var password = $("#userPassword").val();
-                    var confirmPassword = $("#userConfirmPassword").val();
                     var loginType = "Normal";
-
-                    var parameters = [];
-                    parameters.push(name);
-                    parameters.push(email);
-                    parameters.push(password);
-                    parameters.push(loginType);
                     
-                    var res = user_ajax("user_register", "endUser", parameters);
+                    ajax('text',{ trigger: 'register', usertype: 'enduser' },
+                        { name: name, email: email, password: password, loginType: loginType },
+                        function (data) {
+                            res = $.trim(data);
+                            //Actions
+                            if (res.indexOf("success") >= 0) {
+                                //$.mobile.loading( "hide" );
+                                var user_id = res.replace('success', '');
+                                var dest = "signup_verify.html?user_id" + user_id;///////////////////////////////////////////
+                                window.location.href = dest + param;
+                            }
+                            
+                            if (res == "invalid name") {
+                                //$.mobile.loading( "hide" );
 
-                    //Actions
-                    if (res.indexOf("success") >= 0) {
-                        //$.mobile.loading( "hide" );
-                        var user_id = res.replace('success', '');
-                        var dest = "index.html";///////////////////////////////////////////
-                        var param = $.query.set("user_id", user_id).set("email", email).toString();
-                        window.location.href = dest + param;
-                    }
-                    if (res == "invalid name") {
-                        //$.mobile.loading( "hide" );
-                        
-                    }
-                    if (res == "invalid password") {
-                        //$.mobile.loading( "hide" );
-                        
-                    }
-                    if (res == "e-mail id exists") {
-                        //$.mobile.loading( "hide" );
-                        
-                        
-                    }
-                    if (res == "invalid email address") {
-                        //$.mobile.loading( "hide" );
-                        
-                    }
-                    if (res == "fail") {
-                        //$.mobile.loading( "hide" );
-                        
-                    }
-                    if (res == "invalid e-mail id") {
-                        //$.mobile.loading( "hide" );
-                       
-                    }
-                    if (res == "required fields cannot be empty") {
-                        //$.mobile.loading( "hide" );
-                        
-                    }
+                            }
+                            if (res == "invalid password") {
+                                //$.mobile.loading( "hide" );
+
+                            }
+                            if (res == "e-mail id exists") {
+                                //$.mobile.loading( "hide" );
+
+
+                            }
+                            if (res == "invalid email address") {
+                                //$.mobile.loading( "hide" );
+
+                            }
+                            if (res == "fail") {
+                                //$.mobile.loading( "hide" );
+
+                            }
+                            if (res == "invalid e-mail id") {
+                                //$.mobile.loading( "hide" );
+
+                            }
+                            if (res == "required fields cannot be empty") {
+                                //$.mobile.loading( "hide" );
+                               
+                            }
+                            if (res == "insufficient_data") {
+                                //$.mobile.loading( "hide" );
+                                alert("insufficient_data");
+                            }
+                        },
+                        function (xhr, errorType, error) {
+                            console.log('Error Type: ' + errorType + ', Error: ' + error);
+                        }
+                    );
+                    
+                }
+                else
+                {
+                    alert(validationCount);
                 }
             }); 
         });
@@ -292,7 +285,7 @@
                                 </ul>
 
                                 <div class="content-block center" style="margin: 20px 0;">
-                                        <a href="signup_verify.html" class="button button-fill button-raised color-black center external" style="width:50%; margin:auto;">Sign me up!</a>
+                                        <a href="#" id ="btnSignUP" name="btnSignUP" class="button button-fill button-raised color-black center external" style="width:50%; margin:auto;">Sign me up!</a>
                                 </div>
                             </form>
                            
