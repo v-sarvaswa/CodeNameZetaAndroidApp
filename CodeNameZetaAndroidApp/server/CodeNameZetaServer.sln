@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.10
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{A0786B88-2ADB-4C21-ABE8-AA2D79766269}") = "CodeNameZetaServer", "CodeNameZetaServer.phpproj", "{C39E2435-CE6C-4E1A-B8ED-EACAD5F574D9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C39E2435-CE6C-4E1A-B8ED-EACAD5F574D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C39E2435-CE6C-4E1A-B8ED-EACAD5F574D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {046AC7EC-EE61-4F6D-8D8A-0B0EDFC2B6F2}
+	EndGlobalSection
+EndGlobal
