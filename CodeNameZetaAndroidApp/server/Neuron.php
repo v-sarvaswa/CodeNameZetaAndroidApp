@@ -113,12 +113,13 @@
 		{
 			if(!empty($_POST))
 			{
-				$result = parent::callSPRead('e_registerUser',$_POST['name'],$_POST['email'],$_POST['password'],$_POST['loginType']);
+				$result = parent::callSPRead('e_registerUser',$_POST['email'],$_POST['password'],$_POST['name'],'enduser',$_POST['loginType']);
+				//print_r($result);
 				while ($row = $result->fetch_object())
 				{
 					$res = $row->user_id;
 				}
-				parent::sendResponse($res);
+				parent::sendResponse("success".$res);
 			}
 			else
 			{
