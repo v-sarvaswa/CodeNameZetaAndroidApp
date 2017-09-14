@@ -27,12 +27,14 @@
 
 		function no_trigger_received()
 		{
+            echo 'no_trigger_received';
 			//$this->sendResponse('no_trigger_received');
-            $this->callSPIUD('together');
+            $this->callSPRead('e_getVcode',25,'Ve','dsadsa');
 		}
 
 		function sendResponse($data)
 		{
+            echo 'sendResponse';
 			Header("Location: $this->sendresponse_url".$data);
 		}
 
@@ -67,6 +69,7 @@
         {
             try
             {
+                echo 'spread';
                 $ct = func_num_args();
                 $param = '';
                 for ($i=1; $i<$ct; $i++)
@@ -81,16 +84,19 @@
             }
             catch (MySQLException $e)
             {
+                echo 'sqlexception';
                 $this->logError($GLOBALS['userType'],$GLOBALS['trigger'],$e->getMessage());
             }
             catch (Exception $e)
             {
+                echo 'exception';
                 $this->logError($GLOBALS['userType'],$GLOBALS['trigger'],$e->getMessage());
             }
         }
 
         function logError($userType,$trigger,$errorDescription)
         {
+            echo 'logError';
             $result = $this->callSPIUD('sys_logError',$userType,$trigger,$errorDescription);
             $this->sendResponse('server_error');
         }
