@@ -147,8 +147,9 @@
 			}
 			else
 			{
-				$res 
-				parent::sendResponse('insufficient_data');
+				$res->response = "insufficient_data";
+				$jsonRes = json_encode($res);
+				parent::sendResponse($jsonRes);
 			}
 		}
 	}

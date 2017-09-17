@@ -44,8 +44,7 @@
                     }
                     else
                     {
-                        //alert("inside button click");
-                        alert("email");
+                      
                     }
                 }
                 else
@@ -62,7 +61,7 @@
                     }
                     else
                     {
-                        alert("password");
+                        
                     }
                 }
                 else
@@ -76,12 +75,11 @@
                 }
                 else
                 {
-                    alert("name");
+                    
                 }
 
                 if (validationCount == 3)
                 {
-                    //alert(validationCount);
                     var name = $("#userName").val();
                     var email = $("#userEmail").val();
                     var password = $("#userPassword").val();
@@ -104,7 +102,10 @@
                                localforage.setItem('user_email', user_email, function (err) {
                                });
                            }
-                           if(res == "")
+                           if (res == "insufficient_data")
+                           {
+
+                           }
                         },
                         function (xhr, errorType, error) {
                             console.log('Error Type: ' + errorType + ', Error: ' + error);
@@ -114,7 +115,6 @@
                 }
                 else
                 {
-                    //alert(validationCount);
                 }
             }); 
         });
