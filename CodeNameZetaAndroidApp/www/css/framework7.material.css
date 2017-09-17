@@ -2805,7 +2805,7 @@ html:not(.watch-active-state) .list-block .list-button:active,
 }
 .list-block .item-text {
   font-size: 14px;
-  color: #757575;
+  color: #ffffff;
   line-height: 20px;
   position: relative;
   overflow: hidden;
@@ -5605,7 +5605,7 @@ html.ios .statusbar-overlay {
   height: 100%;
   width: 200%;
   box-sizing: border-box;
-  border: 4px solid #757575;
+  border: 4px solid #ffffff;
   border-bottom-color: transparent !important;
   border-radius: 50%;
   -webkit-animation-iteration-count: infinite;

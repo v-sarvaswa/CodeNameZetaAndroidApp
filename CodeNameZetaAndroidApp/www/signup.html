@@ -18,7 +18,10 @@
     <script type="text/javascript" src="js/localforage.min.js"></script>
     <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="js/synapse.js"></script>
+   
     <script>
+        
+
         localforage.setItem('app', 'codenamezeta', function (err) {
             localforage.getItem('app', function (err, value) {
                 if (value == 'codenamezeta')
@@ -30,6 +33,9 @@
         });
 
         $(document).ready(function () {
+
+            
+
             //E-Mail Validation
             $("#btnSignUP").click(function () {
 
@@ -199,14 +205,14 @@
     <div class="views">
         <div class="view view-main">
             <div class="pages navbar-fixed">
-                <div data-page="swiper-horizontal" class="page">
-                    <div data-page="form-elements" class="page">
+                <div data-page="signup" class="page">
                         <div class="navbar">
                             <div class="navbar-inner">
                                 <div class="center">Zeta</div>
                             </div>
                         </div>
                         <div class="page-content">
+                           
                             <div class="content-block-title" style="padding: 0px;font-weight:800;font-size: 22px;overflow: visible;text-align: center;">Sign Up</div>
                             <form class="list-block inputs-list" style="margin-bottom: 12px;">
                                 <ul>
@@ -286,15 +292,27 @@
                             </div>
                             -->
                     </div>
-                </div>
             </div>
         </div>
     </div>
 
-    <script type="text/javascript" src="cordova.js"></script>
-    <script type="text/javascript" data-main="scripts/startup" src="lib/require.2.1.8.js" async></script>
-    <script type="text/javascript" src="js/framework7.js"></script>
-    <script type="text/javascript" src="js/kitchen-sink.js"></script>
-    <script type="text/javascript" src="js/my-app.js"></script>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" data-main="scripts/startup" src="lib/require.2.1.8.js" async></script>
+        <script type="text/javascript" src="js/framework7.js"></script>
+        <script type="text/javascript" src="js/my-app.js"></script>
+        
+        <script>
+            /*myApp.addNotification({
+                message: 'Simple message',
+                closeIcon: false,
+                hold: 2000
+            });*/
+
+            myApp.showPreloader();
+            /*setTimeout(function () {
+                myApp.hideIndicator();
+            }, 200000);*/
+        </script>
+
 </body>
 </html>
