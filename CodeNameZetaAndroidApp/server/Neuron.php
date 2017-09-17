@@ -18,11 +18,6 @@
 		public function __construct()
 		{
 			$this->sendresponse_url = "return.php?data=";
-            $this->conn = new mysqli(DBHOST, DBUSER, DBPASS, DBNAME);
-            if ($this->conn->connect_error)
-            {
-                die("Connection failed: " . $this->conn->connect_error);
-            }
 		}
 
 		function no_trigger_received()
@@ -42,6 +37,12 @@
         {
             try
             {
+				$this->conn = new mysqli(DBHOST, DBUSER, DBPASS, DBNAME);
+				if ($this->conn->connect_error)
+				{
+					die("Connection failed: " . $this->conn->connect_error);
+				}
+
                 $ct = func_num_args();
                 $param = '';
                 for ($i=1; $i<$ct; $i++)
@@ -70,6 +71,12 @@
             try
             {
                 echo 'spread';
+				$this->conn = new mysqli(DBHOST, DBUSER, DBPASS, DBNAME);
+				if ($this->conn->connect_error)
+				{
+					die("Connection failed: " . $this->conn->connect_error);
+				}
+
                 $ct = func_num_args();
                 $param = '';
                 for ($i=1; $i<$ct; $i++)
@@ -80,6 +87,7 @@
                         $param .= "'" . func_get_arg($i) . "',";
                 }
                 $qr = $this->conn->query("CALL ". func_get_arg(0) . "($param)");
+				$this->conn->close();
                 return $qr;
             }
             catch (MySQLException $e)
@@ -108,21 +116,38 @@
 		{
             parent::__construct();
 		}
-
 		function register()
 		{
 			if(!empty($_POST))
 			{
-				$result = parent::callSPRead('e_registerUser',$_POST['email'],$_POST['password'],$_POST['name'],'enduser',$_POST['loginType']);
-				//print_r($result);
-				while ($row = $result->fetch_object())
+				$result1 = parent::callSPRead('e_emailExist',$_POST['email']);
+				if($result1->num_rows != 0)
 				{
-					$res = $row->user_id;
+					if ($row = $result1->fetch_object())
+					{
+						$emailExist = $row->user_hashemail;
+						$res->response = "emailExist";
+						$res->user_email = $emailExist;
+						$jsonRes = json_encode($res);
+						parent::sendResponse($jsonRes);
+					}
 				}
-				parent::sendResponse("success".$res);
+				else
+				{
+					$result = parent::callSPRead('e_registerUser',$_POST['email'],$_POST['password'],$_POST['name'],'enduser',$_POST['loginType']);
+					while ($row = $result->fetch_object())
+					{
+						$user_id = $row->user_id;
+					}
+					$res->response = "success";
+					$res->user_id = $user_id;
+					$jsonRes = json_encode($res);
+					parent::sendResponse($jsonRes);
+				}
 			}
 			else
 			{
+				$res 
 				parent::sendResponse('insufficient_data');
 			}
 		}

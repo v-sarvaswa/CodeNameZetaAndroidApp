@@ -87,51 +87,24 @@
                     var password = $("#userPassword").val();
                     var loginType = "Normal";
                     
-                    ajax('text',{ trigger: 'register', usertype: 'enduser' },
+                    ajax('json',{ trigger: 'register', usertype: 'enduser' },
                         { name: name, email: email, password: password, loginType: loginType },
                         function (data) {
-                            res = $.trim(data);
-                            //Actions
-                            if (res.indexOf("success") >= 0) {
-                                //$.mobile.loading( "hide" );
-                                var user_id = res.replace('success', '');
-                                var dest = "signup_verify.html?user_id" + user_id;///////////////////////////////////////////
-                                window.location.href = dest + param;
-                            }
-                            
-                            if (res == "invalid name") {
-                                //$.mobile.loading( "hide" );
-
-                            }
-                            if (res == "invalid password") {
-                                //$.mobile.loading( "hide" );
-
-                            }
-                            if (res == "e-mail id exists") {
-                                //$.mobile.loading( "hide" );
-
-
-                            }
-                            if (res == "invalid email address") {
-                                //$.mobile.loading( "hide" );
-
-                            }
-                            if (res == "fail") {
-                                //$.mobile.loading( "hide" );
-
-                            }
-                            if (res == "invalid e-mail id") {
-                                //$.mobile.loading( "hide" );
-
-                            }
-                            if (res == "required fields cannot be empty") {
-                                //$.mobile.loading( "hide" );
-                               
-                            }
-                            if (res == "insufficient_data") {
-                                //$.mobile.loading( "hide" );
-                                alert("insufficient_data");
-                            }
+                           var res = data["response"];
+                           if (res == "success")
+                           {
+                               var user_id = data["user_id"];
+                               localforage.setItem('user_id', user_id, function (err) {
+                                   window.location.href = "signup_stage_2.html";
+                               });
+                           }
+                           if (res == "emailExist")
+                           {
+                               var user_email = data["user_email"];
+                               localforage.setItem('user_email', user_email, function (err) {
+                               });
+                           }
+                           if(res == "")
                         },
                         function (xhr, errorType, error) {
                             console.log('Error Type: ' + errorType + ', Error: ' + error);
