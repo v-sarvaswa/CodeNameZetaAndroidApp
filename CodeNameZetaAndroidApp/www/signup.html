@@ -31,109 +31,6 @@
                 }
             });
         });
-
-        $(document).ready(function () {
-            preloader = new $.materialPreloader({
-                position: 'top',
-                height: '8px',
-                col_1: '#999999',
-                col_2: '#cccccc',
-                col_3: '#e5e5e5',
-                col_4: '#000000',
-                fadeIn: 1,
-                fadeOut: 1
-            });
-
-            preloader.off();
-
-            //E-Mail Validation
-            $("#btnSignUP").click(function () {
-
-                var validationCount = 0;
-
-                //E-Mail
-                if ($.trim($("#userEmail").val()).length > 0)
-                {
-                    if (isEmail($("#userEmail").val()))
-                    {
-                        validationCount++;//////////////////////////////////count = 1
-                    }
-                    else
-                    {
-                      
-                    }
-                }
-                else
-                {
-                    $('#userEmail').css('border-color', '#d52b1e');
-                }
-
-                //Password = Re-Password
-                if (($.trim($("#userPassword").val()).length >= 6) && ($.trim($("#userConfirmPassword").val()).length >= 6))
-                {
-                    if ($("#userPassword").val() == $("#userConfirmPassword").val())
-                    {
-                        validationCount++;///////////////////////////////count = 2
-                    }
-                    else
-                    {
-                        
-                    }
-                }
-                else
-                {
-                }
-
-                //Name
-                if ($.trim($("#userName").val()).length > 1)
-                {
-                    validationCount++;////////////////////////////////////count = 3
-                }
-                else
-                {
-                    
-                }
-
-                if (validationCount == 3)
-                {
-                    var name = $("#userName").val();
-                    var email = $("#userEmail").val();
-                    var password = $("#userPassword").val();
-                    var loginType = "Normal";
-                    
-                    ajax('json',{ trigger: 'register', usertype: 'enduser' },
-                        { name: name, email: email, password: password, loginType: loginType },
-                        function (data) {
-                           var res = data["response"];
-                           if (res == "success")
-                           {
-                               var user_id = data["user_id"];
-                               localforage.setItem('user_id', user_id, function (err) {
-                                   window.location.href = "signup_stage_2.html";
-                               });
-                           }
-                           if (res == "emailExist")
-                           {
-                               var user_email = data["user_email"];
-                               localforage.setItem('user_email', user_email, function (err) {
-                               });
-                           }
-                           if (res == "insufficient_data")
-                           {
-
-                           }
-                        },
-                        function (xhr, errorType, error) {
-                            console.log('Error Type: ' + errorType + ', Error: ' + error);
-                        }
-                    );
-                    
-                }
-                else
-                {
-                }
-            }); 
-        });
     </script>
 </head>
 <body class="theme-black">
@@ -233,7 +130,155 @@
         <script type="text/javascript" src="js/framework7.js"></script>
         <script type="text/javascript" src="js/kitchen-sink.js"></script>
         <script type="text/javascript" src="js/my-app.js"></script>
+        <script type="text/javascript" src="js/jquery.validate.min.js"></script>
         <script>
+            $(document).ready(function () {
+               
+                preloader = new $.materialPreloader({
+                    position: 'top',
+                    height: '8px',
+                    col_1: '#999999',
+                    col_2: '#cccccc',
+                    col_3: '#e5e5e5',
+                    col_4: '#000000',
+                    fadeIn: 1,
+                    fadeOut: 1
+                });
+
+                preloader.off();
+
+                $("#btnSignUP").click(function () {
+                    $("form").validate({
+                        rules: {
+                            userName:{
+                                required: true
+                            },
+                            userEmail: {
+                                required: true,
+                                email: true
+                            },
+                            userPassword: {
+                                required: true,
+                                minlength:6
+                            },
+                            userConfirmPassword:{
+                                required: true,
+                                minlength: 6
+                            }
+                        },
+                        errorPlacement: function (error, element) {
+                            alert(element);
+                            error.insertAfter(element.parent());
+                        }
+                    });
+                });
+
+                //E-Mail Validation
+              /*  $("#btnSignUP").click(function () {
+                    preloader.on();
+                    var validationCount = 0;
+                    
+                    //E-Mail
+                    if ($.trim($("#userEmail").val()).length > 0)
+                    {
+                        if (isEmail($("#userEmail").val()))
+                        {
+                            validationCount++;//////////////////////////////////count = 1
+                        }
+                        else
+                        {
+                            $('#userEmail').css('border-bottom-color', '#ff0000');
+                        }
+                    }
+                    else
+                    {
+                        $('#userEmail').css('border-bottom-color', '#ff0000');
+                    }
+
+                    //Password = Re-Password
+                    if (($.trim($("#userPassword").val()).length >= 6) && ($.trim($("#userConfirmPassword").val()).length >= 6))
+                    {
+                        if ($("#userPassword").val() == $("#userConfirmPassword").val())
+                        {
+                            validationCount++;///////////////////////////////count = 2
+                        }
+                        else
+                        {
+
+                        }
+                    }
+                    else
+                    {
+
+                    }
+
+                    //Name
+                    if ($.trim($("#userName").val()).length > 1)
+                    {
+                        validationCount++;////////////////////////////////////count = 3
+                    }
+                    else
+                    {
+
+                    }
+
+                    if (validationCount == 3)
+                    {
+                        preloader.on();
+                        var name = $("#userName").val();
+                        var email = $("#userEmail").val();
+                        var password = $("#userPassword").val();
+                        var loginType = "Normal";
+
+                        ajax('json', { trigger: 'register', usertype: 'enduser' },
+                            { name: name, email: email, password: password, loginType: loginType },
+                            function (data) {
+                                var res = data["response"];
+                                if (res == "success")
+                                {
+                                    var user_id = data["user_id"];
+                                    localforage.setItem('user_id', user_id, function (err) {
+                                        window.location.href = "signup_stage_2.html";
+                                    });
+                                }
+                                if (res == "emailExist")
+                                {
+                                    preloader.off();
+                                    var user_email = data["user_email"];
+                                    localforage.setItem('user_email', user_email, function (err) {
+                                        myApp.addNotification({
+                                            message: 'Email-Id already Exist',
+                                            closeIcon: false,
+                                            hold: 2000
+                                        });
+                                    });
+                                }
+                                if (res == "insufficient_data")
+                                {
+                                    myApp.addNotification({
+                                        message: 'Insufficient Data',
+                                        closeIcon: false,
+                                        hold: 2000
+                                    });
+                                }
+                            },
+                            function (xhr, errorType, error) {
+                                console.log('Error Type: ' + errorType + ', Error: ' + error);
+                            }
+                        );
+
+                    }
+                    else
+                    {
+                        preloader.off();
+                        myApp.addNotification({
+                            message: '',
+                            closeIcon: false,
+                            hold: 2000
+                        });
+                    }
+                });*/
+            });
             /*myApp.addNotification({
                 message: 'Simple message',
                 closeIcon: false,
