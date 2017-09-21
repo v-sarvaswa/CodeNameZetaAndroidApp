@@ -14,11 +14,12 @@
     <link href="http://fonts.googleapis.com/css?family=Roboto:400,300,500,700" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="css/material-icons.css">
     <link rel="stylesheet" href="css/kitchen-sink.css">
+    <link rel="stylesheet" href="css/materialPreloader.css">
     <link rel="icon" href="img/icon.png">
     <script type="text/javascript" src="js/localforage.min.js"></script>
     <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="js/synapse.js"></script>
-   
+    <script type="text/javascript" src="js/materialPreloader.min.js"></script>
     <script>
         
 
@@ -34,7 +35,17 @@
 
         $(document).ready(function () {
 
-            
+            preloader = new $.materialPreloader({
+                position: 'top',
+                height: '8px',
+                col_1: '#999999',
+                col_2: '#cccccc',
+                col_3: '#e5e5e5',
+                col_4: '#7f7f7f',
+                fadeIn: 100,
+                fadeOut: 100
+            });
+            preloader.on();
 
             //E-Mail Validation
             $("#btnSignUP").click(function () {
@@ -212,7 +223,7 @@
                             </div>
                         </div>
                         <div class="page-content">
-                           
+                            <div class="overlay-load"></div>
                             <div class="content-block-title" style="padding: 0px;font-weight:800;font-size: 22px;overflow: visible;text-align: center;">Sign Up</div>
                             <form class="list-block inputs-list" style="margin-bottom: 12px;">
                                 <ul>
@@ -238,7 +249,7 @@
                                             </div>
                                         </div>
                                     </li>
-                                   
+
                                     <li>
                                         <div class="item-content">
                                             <div class="item-media"><i class="icon material-icons">lock_outline</i></div>
@@ -250,7 +261,7 @@
                                             </div>
                                         </div>
                                     </li>
-                                   
+
                                     <li>
                                         <div class="item-content">
                                             <div class="item-media"><i class="icon material-icons">lock_outline</i></div>
@@ -268,7 +279,7 @@
                                         <a href="#" id ="btnSignUP" name="btnSignUP" class="button button-fill button-raised color-black center external" style="width:50%; margin:auto;">Sign me up!</a>
                                 </div>
                             </form>
-                           
+
                             <div class="content-block-title center" style="text-align: center; padding: 0px; margin: 0px;">
                                 <img src="img/hzdivider-right.png" style="vertical-align: middle;"/>
                                 &nbsp;
@@ -307,11 +318,7 @@
                 closeIcon: false,
                 hold: 2000
             });*/
-
-            myApp.showPreloader();
-            /*setTimeout(function () {
-                myApp.hideIndicator();
-            }, 200000);*/
+            
         </script>
 
 </body>
