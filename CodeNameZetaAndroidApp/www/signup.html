@@ -22,8 +22,6 @@
     <script type="text/javascript" src="js/synapse.js"></script>
     <script type="text/javascript" src="js/materialPreloader.min.js"></script>
     <script>
-        
-
         localforage.setItem('app', 'codenamezeta', function (err) {
             localforage.getItem('app', function (err, value) {
                 if (value == 'codenamezeta')
@@ -35,7 +33,6 @@
         });
 
         $(document).ready(function () {
-
             preloader = new $.materialPreloader({
                 position: 'top',
                 height: '8px',
@@ -142,7 +139,6 @@
 <body class="theme-black">
     <div class="statusbar-overlay"></div>
     <div class="panel-overlay"></div>
-
     <div class="views">
         <div class="view view-main">
             <div class="pages navbar-fixed">
@@ -179,7 +175,6 @@
                                         </div>
                                     </div>
                                 </li>
-
                                 <li>
                                     <div class="item-content">
                                         <div class="item-media"><i class="icon material-icons">lock_outline</i></div>
@@ -191,7 +186,6 @@
                                         </div>
                                     </div>
                                 </li>
-
                                 <li>
                                     <div class="item-content">
                                         <div class="item-media"><i class="icon material-icons">lock_outline</i></div>
@@ -204,12 +198,10 @@
                                     </div>
                                 </li>
                             </ul>
-
                             <div class="content-block center" style="margin: 20px 0;">
                                 <a href="#" id="btnSignUP" name="btnSignUP" class="button button-fill button-raised color-black center external" style="width:50%; margin:auto;">Sign me up!</a>
                             </div>
                         </form>
-
                         <div class="content-block-title center" style="text-align: center; padding: 0px; margin: 0px;">
                             <img src="img/hzdivider-right.png" style="vertical-align: middle;" />
                             &nbsp;
@@ -220,7 +212,6 @@
                             <button class="loginBtn loginBtn--facebook" style="margin-top: 15px;">
                                 Facebook
                             </button>
-
                             <button class="loginBtn loginBtn--google" style="margin-top: 15px;">
                                 Google
                             </button>
@@ -240,8 +231,8 @@
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" data-main="scripts/startup" src="lib/require.2.1.8.js" async></script>
         <script type="text/javascript" src="js/framework7.js"></script>
+        <script type="text/javascript" src="js/kitchen-sink.js"></script>
         <script type="text/javascript" src="js/my-app.js"></script>
-        
         <script>
             /*myApp.addNotification({
                 message: 'Simple message',
@@ -249,6 +240,5 @@
                 hold: 2000
             });*/
         </script>
-
 </body>
 </html>
