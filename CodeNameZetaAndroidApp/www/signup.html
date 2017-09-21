@@ -53,7 +53,7 @@
                             <ul>
                                 <li>
                                     <div class="item-content">
-                                        <div class="item-media"><i class="icon material-icons">person_outline</i></div>
+                                        <div class="item-media"><i id="nameIcon" class="icon material-icons">person_outline</i></div>
                                         <div class="item-inner">
                                             <div class="item-title floating-label">Your name</div>
                                             <div class="item-input">
@@ -64,7 +64,7 @@
                                 </li>
                                 <li>
                                     <div class="item-content">
-                                        <div class="item-media"><i class="icon material-icons">email</i></div>
+                                        <div class="item-media"><i id="emailIcon" class="icon material-icons">email</i></div>
                                         <div class="item-inner">
                                             <div class="item-title floating-label">E-mail</div>
                                             <div class="item-input">
@@ -75,7 +75,7 @@
                                 </li>
                                 <li>
                                     <div class="item-content">
-                                        <div class="item-media"><i class="icon material-icons">lock_outline</i></div>
+                                        <div class="item-media"><i id="passwordIcon" class="icon material-icons">lock_outline</i></div>
                                         <div class="item-inner">
                                             <div class="item-title floating-label">Password</div>
                                             <div class="item-input">
@@ -86,7 +86,7 @@
                                 </li>
                                 <li>
                                     <div class="item-content">
-                                        <div class="item-media"><i class="icon material-icons">lock_outline</i></div>
+                                        <div class="item-media"><i id="confirmPwdIcon" class="icon material-icons">lock_outline</i></div>
                                         <div class="item-inner">
                                             <div class="item-title floating-label">Confirm Password</div>
                                             <div class="item-input">
@@ -164,30 +164,43 @@
                     if (isEmail(email))
                     {
                         validationCount++;//////////////////////////////////count = 1
+                        $("#emailIcon").css('color', '#757575');
+                        $("#userEmail").css('color', '#212121');
                     }
                     else
                     {
-                        
+                        $("#emailIcon").css('color', 'red');
+                        $("#userEmail").css('color', 'red');
                     }
 
                     //Password = Re-Password
                     if (passwordRequiredLength(password,6) && passwordRequiredLength(confirmPassword,6) && passwordCheck(password, confirmPassword))
                     {
                         validationCount++;/////////////////////////////////////count=2
+                        $("#passwordIcon").css('color', '#757575');
+                        $("#confirmPwdIcon").css('color', '#757575');
+                        $("#userPassword").css('color', '#212121');
+                        $("#userConfirmPassword").css('color', '#212121');
                     }
                     else
                     {
-                        
+                        $("#passwordIcon").css('color', 'red');
+                        $("#confirmPwdIcon").css('color', 'red');
+                        $("#userPassword").css('color', 'red');
+                        $("#userConfirmPassword").css('color', 'red');
                     }
 
                     //Name
                     if (required(name))
                     {
                         validationCount++;////////////////////////////////////count = 3
+                        $("#nameIcon").css('color', '#757575');
+                        $("#userName").css('color', '#212121');
                     }
                     else
                     {
-                        
+                        $("#nameIcon").css('color', 'red');
+                        $("#userName").css('color', 'red');
                     }
 
                     if (validationCount == 3)
