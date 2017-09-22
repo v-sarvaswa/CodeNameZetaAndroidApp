@@ -55,7 +55,7 @@
                                     <div class="item-content">
                                         <div class="item-media"><i id="nameIcon" class="icon material-icons">person_outline</i></div>
                                         <div class="item-inner">
-                                            <div class="item-title floating-label">Your name</div>
+                                            <div class="item-title floating-label" id="lbluserName">Your name</div>
                                             <div class="item-input">
                                                 <input type="text" id="userName" name="userName" placeholder="" />
                                             </div>
@@ -66,7 +66,7 @@
                                     <div class="item-content">
                                         <div class="item-media"><i id="emailIcon" class="icon material-icons">email</i></div>
                                         <div class="item-inner">
-                                            <div class="item-title floating-label">E-mail</div>
+                                            <div class="item-title floating-label" id="lbluserEmail">E-mail</div>
                                             <div class="item-input">
                                                 <input type="email" id="userEmail" name="userEmail" placeholder="" />
                                             </div>
@@ -77,7 +77,7 @@
                                     <div class="item-content">
                                         <div class="item-media"><i id="passwordIcon" class="icon material-icons">lock_outline</i></div>
                                         <div class="item-inner">
-                                            <div class="item-title floating-label">Password</div>
+                                            <div class="item-title floating-label" id="lbluserPassword">Password</div>
                                             <div class="item-input">
                                                 <input type="password" id="userPassword" name="userPassword" placeholder="" />
                                             </div>
@@ -88,7 +88,7 @@
                                     <div class="item-content">
                                         <div class="item-media"><i id="confirmPwdIcon" class="icon material-icons">lock_outline</i></div>
                                         <div class="item-inner">
-                                            <div class="item-title floating-label">Confirm Password</div>
+                                            <div class="item-title floating-label" id="lbluserConfirmPassword">Confirm Password</div>
                                             <div class="item-input">
                                                 <input type="password" id="userConfirmPassword" name="userConfirmPassword" placeholder="" />
                                             </div>
@@ -116,11 +116,6 @@
                             <br /><br /><br />
                             <span style="vertical-align:middle; font-size:18px;">Already have an account? </span><a href="#" class="external center" style="margin: 10px auto; color: #000000;text-decoration:underline; vertical-align:middle; font-size:18px; font-weight:800; line-height: 19px;">Sign in</a>
                         </div>
-                        <!--
-                        <div class="content-block-title center" style="line-height: 30px;text-align: center; padding: 2%; margin: 0px; background-color: #DEDEDE; bottom: 0; right: 0; z-index: 500; margin: 0;backface-visibility: hidden; color: #000000; position: fixed; width:100%; height: 5%;vertical-align:middle;">
-                            <span style="vertical-align:middle;">Already have an account? </span><a href="#" class="external center" style="margin: 10px auto; color: #000000;text-decoration:underline; vertical-align:middle;">Sign in</a>
-                        </div>
-                        -->
                     </div>
                 </div>
             </div>
@@ -138,18 +133,56 @@
                 preloader = new $.materialPreloader({
                     position: 'top',
                     height: '8px',
-                    col_1: '#999999',
+                    col_1: '#000000',
                     col_2: '#cccccc',
                     col_3: '#e5e5e5',
-                    col_4: '#000000',
+                    col_4: '#999999',
                     fadeIn: 1,
                     fadeOut: 1
                 });
 
                 preloader.off();
 
-               
-                //E-Mail Validation
+                $("#userName").focus(function () {
+                    $("#lbluserName").empty();
+                    $("#lbluserName").append("Enter your full name");
+                });
+
+                $("#userName").focusout(function () {
+                    $("#lbluserName").empty();
+                    $("#lbluserName").append("Your name");
+                });
+
+                $("#userEmail").focus(function () {
+                    $("#lbluserEmail").empty();
+                    $("#lbluserEmail").append("Valid e-mail address");
+                });
+
+                $("#userEmail").focusout(function () {
+                    $("#lbluserEmail").empty();
+                    $("#lbluserEmail").append("E-mail");
+                });
+
+                $("#userPassword").focus(function () {
+                    $("#lbluserPassword").empty();
+                    $("#lbluserPassword").append("Strong password of minimum 6 digits");
+                });
+
+                $("#userPassword").focusout(function () {
+                    $("#lbluserPassword").empty();
+                    $("#lbluserPassword").append("Password");
+                });
+
+                $("#userConfirmPassword").focus(function () {
+                    $("#lbluserConfirmPassword").empty();
+                    $("#lbluserConfirmPassword").append("Enter the password again");
+                });
+
+                $("#userConfirmPassword").focusout(function () {
+                    $("#lbluserConfirmPassword").empty();
+                    $("#lbluserConfirmPassword").append("Confirm Password");
+                });
+
                 $("#btnSignUP").click(function ()
                 {
                     preloader.on();
@@ -158,12 +191,11 @@
                     var email = $("#userEmail").val();
                     var password = $("#userPassword").val();
                     var confirmPassword = $("#userConfirmPassword").val();
-                    var loginType = "Normal";
+                    var loginType = "normal";
 
-                    //E-Mail
                     if (isEmail(email))
                     {
-                        validationCount++;//////////////////////////////////count = 1
+                        validationCount++;
                         $("#emailIcon").css('color', '#757575');
                         $("#userEmail").css('color', '#212121');
                     }
@@ -173,10 +205,9 @@
                         $("#userEmail").css('color', 'red');
                     }
 
-                    //Password = Re-Password
                     if (passwordRequiredLength(password,6) && passwordRequiredLength(confirmPassword,6) && passwordCheck(password, confirmPassword))
                     {
-                        validationCount++;/////////////////////////////////////count=2
+                        validationCount++;
                         $("#passwordIcon").css('color', '#757575');
                         $("#confirmPwdIcon").css('color', '#757575');
                         $("#userPassword").css('color', '#212121');
@@ -190,10 +221,9 @@
                         $("#userConfirmPassword").css('color', 'red');
                     }
 
-                    //Name
                     if (required(name))
                     {
-                        validationCount++;////////////////////////////////////count = 3
+                        validationCount++;
                         $("#nameIcon").css('color', '#757575');
                         $("#userName").css('color', '#212121');
                     }
@@ -214,7 +244,15 @@
                                 {
                                     var user_id = data["user_id"];
                                     localforage.setItem('user_id', user_id, function (err) {
-                                        window.location.href = "signup_verify.html";
+                                        localforage.setItem('user_stage', '1', function (err) {
+                                            localforage.setItem('user_name', name, function (err) {
+                                                localforage.setItem('user_email', email, function (err) {
+                                                    localforage.setItem('user_loginType', loginType, function (err) {
+                                                        window.location.href = "signup_verify.html";
+                                                    });
+                                                });
+                                            });
+                                        });
                                     });
                                 }
                                 if (res == "emailExist")
@@ -248,18 +286,13 @@
                     {
                         preloader.off();
                         myApp.addNotification({
-                            message: 'Simple message',
+                            message: 'Please check highlighted fields!',
                             closeIcon: false,
                             hold: 2000
                         });
                     }
                 });
             });
-            /*myApp.addNotification({
-                message: 'Simple message',
-                closeIcon: false,
-                hold: 2000
-            });*/
         </script>
 </body>
 </html>
