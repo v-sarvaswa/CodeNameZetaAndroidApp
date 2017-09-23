@@ -1,4 +1,4 @@
-/************************************************************************
+﻿/************************************************************************
 Synapse v1.0
 
 ************************************************************************/
@@ -107,10 +107,6 @@ function disconnect() {
         }
     );
 }
-
-window.onerror = function (what, line, file) {
-    alert(what + '; ' + line + '; ' + file);
-};
 
 function handleOpenURL(url) {
     document.querySelector("#feedback").innerHTML = "App was opened by URL: " + url;
