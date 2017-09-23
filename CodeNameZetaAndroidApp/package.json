@@ -3,5 +3,13 @@
     "version": "1.0.0",
     "private": true,
     "dependencies": {
+        "cordova-plugin-googleplus": "git+https://github.com/EddyVerbruggen/cordova-plugin-googleplus.git"
+    },
+    "cordova": {
+        "plugins": {
+            "cordova-plugin-googleplus": {
+                "REVERSED_CLIENT_ID": "com.googleusercontent.apps.897362942171-913doju16dj789dq984hcmah4qjj2aof"
+            }
+        }
     }
 }

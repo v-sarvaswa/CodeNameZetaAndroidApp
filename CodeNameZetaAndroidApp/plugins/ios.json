@@ -12,6 +12,10 @@
         },
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "hexaxle.zeta"
+        },
+        "cordova-plugin-googleplus": {
+            "REVERSED_CLIENT_ID": "com.googleusercontent.apps.897362942171-913doju16dj789dq984hcmah4qjj2aof",
+            "PACKAGE_NAME": "hexaxle.zeta"
         }
     },
     "dependent_plugins": {}
