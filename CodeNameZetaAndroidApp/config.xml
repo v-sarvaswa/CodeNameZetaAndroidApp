@@ -8,7 +8,6 @@
     <access origin="*" />
     <preference name="SplashScreen" value="screen" />
     <preference name="windows-target-version" value="10.0" />
-    <plugin name="cordova-plugin-whitelist" spec="1.2.2" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
@@ -87,12 +86,13 @@
         <splash height="1920" src="res/screens/windows/SplashScreen.scale-240.png" width="1152" />
         <splash height="1920" src="res/screens/windows/SplashScreenPhone.scale-240.png" width="1152" />
     </platform>
-    <plugin name="cordova-plugin-statusbar" spec="~2.2.3" />
     <vs:toolsetVersion>6.3.1</vs:toolsetVersion>
     <engine name="android" spec="5.2.1" />
     <engine name="ios" spec="4.2.0" />
     <engine name="windows" spec="4.4.2" />
-    <plugin name="cordova-plugin-googleplus" spec="https://github.com/EddyVerbruggen/cordova-plugin-googleplus">
+    <plugin name="cordova-plugin-googleplus" spec="git+https://github.com/EddyVerbruggen/cordova-plugin-googleplus.git">
         <variable name="REVERSED_CLIENT_ID" value="com.googleusercontent.apps.897362942171-913doju16dj789dq984hcmah4qjj2aof" />
     </plugin>
+    <plugin name="cordova-plugin-statusbar" spec="~2.2.3" />
+    <plugin name="cordova-plugin-whitelist" spec="1.2.2" />
 </widget>

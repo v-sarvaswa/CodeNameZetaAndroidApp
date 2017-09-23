@@ -110,7 +110,7 @@
                             <button class="loginBtn loginBtn--facebook" style="margin-top: 15px;">
                                 Facebook
                             </button>
-                            <button class="loginBtn loginBtn--google" style="margin-top: 15px;">
+                            <button class="loginBtn loginBtn--google" id="ssoGoogle" style="margin-top: 15px;">
                                 Google
                             </button>
                             <br /><br /><br />
@@ -315,6 +315,18 @@
                             hold: 20000
                         });
                     }
+                });
+
+                $("#ssoGoogle").click(function () {
+                    window.plugins.googleplus.login(
+                        {},
+                        function (obj) {
+                            alert("Hi, " + obj.displayName + ", " + obj.email);
+                        },
+                        function (msg) {
+                            alert("error: " + msg);
+                        }
+                    );
                 });
             });
         </script>

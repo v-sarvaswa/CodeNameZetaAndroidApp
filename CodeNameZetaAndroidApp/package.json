@@ -3,13 +3,25 @@
     "version": "1.0.0",
     "private": true,
     "dependencies": {
-        "cordova-plugin-googleplus": "git+https://github.com/EddyVerbruggen/cordova-plugin-googleplus.git"
+        "cordova-plugin-googleplus": "git+https://github.com/EddyVerbruggen/cordova-plugin-googleplus.git",
+        "cordova-android": "5.2.1",
+        "cordova-ios": "4.2.0",
+        "cordova-windows": "4.4.2",
+        "cordova-plugin-statusbar": "~2.2.3",
+        "cordova-plugin-whitelist": "1.2.2"
     },
     "cordova": {
         "plugins": {
             "cordova-plugin-googleplus": {
                 "REVERSED_CLIENT_ID": "com.googleusercontent.apps.897362942171-913doju16dj789dq984hcmah4qjj2aof"
-            }
-        }
+            },
+            "cordova-plugin-statusbar": {},
+            "cordova-plugin-whitelist": {}
+        },
+        "platforms": [
+            "android",
+            "ios",
+            "windows"
+        ]
     }
 }
