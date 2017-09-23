@@ -5583,7 +5583,7 @@ html:not(.watch-active-state) .speed-dial-buttons a.theme-white:active,
   color: #fff;
 }
 .theme-black .button:not(.button-fill) {
-  color: #000000;
+  color: #ffffff;
 }
 .theme-black .navbar .button:not(.button-fill),
 .theme-black.navbar .button:not(.button-fill),

@@ -255,23 +255,48 @@
                                         });
                                     });
                                 }
-                                if (res == "emailExist")
-                                {
-                                    preloader.off();
-                                    var user_email = data["user_email"];
-                                    localforage.setItem('user_email', user_email, function (err) {
-                                        myApp.addNotification({
-                                            message: 'Email-Id already Exist',
-                                            closeIcon: false,
-                                            hold: 2000
-                                        });
-                                    });
-                                }
-                                if (res == "insufficient_data")
+                                if (res == "normal_exist")
                                 {
                                     preloader.off();
                                     myApp.addNotification({
-                                        message: 'Insufficient Data',
+                                        message: 'Email-ID already exists!',
+                                        button: {
+                                            text: 'Sign In',
+                                            color: 'lightgreen',
+                                            close: true
+                                        },
+                                        onClose: function () {
+                                            window.location.href = "login.html";
+                                        }
+                                    });
+                                }
+                                if (res == "sso_exist") {
+                                    preloader.off();
+                                    myApp.addNotification({
+                                        message: 'Email-ID already exists!',
+                                        button: {
+                                            text: 'Forgot Password?',
+                                            color: 'lightgreen',
+                                            close: true
+                                        },
+                                        onClose: function () {
+                                            //window.location.href = "signup_verify.html";
+                                        }
+                                    });
+                                }
+                                if (res == "insufficient_data" || res == "no_trigger_received")
+                                {
+                                    preloader.off();
+                                    myApp.addNotification({
+                                        message: 'Something went wrong! Try again!',
+                                        closeIcon: false,
+                                        hold: 2000
+                                    });
+                                }
+                                if (res == "server_error") {
+                                    preloader.off();
+                                    myApp.addNotification({
+                                        message: 'Server Error! Try again!',
                                         closeIcon: false,
                                         hold: 2000
                                     });
@@ -287,8 +312,7 @@
                         preloader.off();
                         myApp.addNotification({
                             message: 'Please check highlighted fields!',
-                            closeIcon: false,
-                            hold: 2000
+                            hold: 20000
                         });
                     }
                 });

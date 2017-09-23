@@ -271,17 +271,20 @@
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" data-main="scripts/startup" src="lib/require.2.1.8.js" async></script>
     <script type="text/javascript" src="js/framework7.js"></script>
-    <script type="text/javascript" src="js/kitchen-sink.js"></script>
+    
     <script type="text/javascript" src="js/my-app.js"></script>
 
         <script>
             /*myApp.addNotification({
-                message: 'Simple message',
-                closeIcon: false,
-                hold: 2000
+                message: 'Close me to see Alert',
+                button: {
+                    text: 'Close Me',
+                    color: 'lightgreen'
+                },
+                onClose: function () {
+                    myApp.alert('Notification closed');
+                }
             });*/
-
-                 
         </script>
 </body>
 </html>
