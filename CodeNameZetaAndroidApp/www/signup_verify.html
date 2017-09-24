@@ -20,6 +20,14 @@
     <script type="text/javascript" src="js/localforage.min.js"></script>
     <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="js/materialPreloader.min.js"></script>
+    <script>
+        function displayEmail() {
+            localforage.getItem('user_email', function (err, user_email_value) {
+                $("#displayEmail").html(user_email_value);
+            });
+        }
+        displayEmail();
+    </script>
 </head>
 <body class="theme-black">
     <div class="statusbar-overlay"></div>
@@ -39,7 +47,8 @@
                             <div class="overlay-load"></div>
                             <div class="content-block-title" style="padding: 0px;font-weight:800;font-size: 22px;overflow: visible;text-align: center;">Verify Its You!</div>
                             <img src="img/email.png" style="margin:auto; width: 40%;"/>
-                            <p style="text-align:justify; padding: 15px;font-size: 18px;margin: 0;">
+                            <p style="text-align:center; font-size:18px; font-weight:400; margin: 0;" id="displayEmail"></p>
+                            <p style="text-align:justify; padding: 10px;font-size: 18px;margin: 0;">
                                 Just to make sure it's really you, we've sent you an e-mail with a passcode to enter.
                             </p>
                             <p style="text-align:center; font-size:18px; font-weight:600; margin: 0;">
@@ -61,9 +70,11 @@
                                 <div class="content-block center" style="margin: 20px 0;">
                                     <a href="#" id="btnAuthenticate" class="button button-fill button-raised color-black center external" style="width:50%; margin:auto;">Authenticate</a>
                                     <br/>
-                                    <span style="vertical-align:middle; font-size:18px;">Haven't received yet? </span><a href="#" class="external center" style="margin: 10px auto; color: #000000;text-decoration:underline; vertical-align:middle; font-size:18px; font-weight:800; line-height: 19px;">Re-send</a>
+                                    <span style="vertical-align:middle; font-size:18px;">Haven't received yet? </span><a href="#" id="reSendPassCode" class="external center" style="margin: 5px auto; color: #8c8c8c;text-decoration:underline; vertical-align:middle; font-size:18px; font-weight:800; line-height: 19px;">Re-send</a>
+                                    &nbsp;
+                                    <span id="reSendTimeOut" style="margin: 5px auto; color: #d24545; vertical-align:middle; font-size:14px; font-weight:600; line-height: 19px;"></span>
                                     <br />
-                                    <span style="vertical-align:middle; font-size:18px;">Wrong e-mail address? </span><a href="#" id="btnUpdateEmail" class="external center" style="margin: 10px auto; color: #000000;text-decoration:underline; vertical-align:middle; font-size:18px; font-weight:800; line-height: 19px;">Update</a>
+                                    <span style="vertical-align:middle; font-size:18px;">Wrong e-mail address? </span><a href="#" id="btnUpdateEmail" class="external center" style="margin: 5px auto; color: #000000;text-decoration:underline; vertical-align:middle; font-size:18px; font-weight:800; line-height: 19px;">Update</a>
                                 </div>
                             </form>
                             </div>
@@ -82,11 +93,115 @@
 
         $(document).ready(function () {
 
+            /***** Initialize *****/
+
             preloaderInit();
             preloader.off();
+            generatePassCode();
+            
+            /***** OnLoad *****/
+          
+            function loadReSendTimeOut()
+            {
+                $("#reSendPassCode").attr('style', 'margin: 5px auto; color: #8c8c8c;text-decoration:underline; vertical-align:middle; font-size:18px; font-weight:800; line-height: 19px;');
+                $("#reSendTimeOut").fadeIn();
+                var t = 31;
+
+                var myVar = setInterval(function () {
+                    t--;
+                    $("#reSendTimeOut").html(t + ' sec');
+                    $("#reSendPassCode").off('click');
+                }, 1000);
+
+                setTimeout(function () {
+                    clearInterval(myVar);
+                    $("#reSendPassCode").attr('style', 'margin: 5px auto; color: #000000;text-decoration:underline; vertical-align:middle; font-size:18px; font-weight:800; line-height: 19px;');
+                    $("#reSendTimeOut").fadeOut();
+                    $("#reSendPassCode").on('click', generatePassCode);
+
+                }, 31000);
+            }
+            
+            function generatePassCode()
+            {
+                loadReSendTimeOut();
+
+                localforage.getItem('user_id', function (err, user_id_value) {
+                    localforage.getItem('user_email', function (err, user_email_value) {
+
+                        ajax('json', { trigger: 'sendVCode', usertype: 'enduser' },
+                            { user_email: user_email_value, user_id: user_id_value },
+                            function (data) {
+
+                                var res = data["response"];
+
+                                if (res == "success") {
+                                    var user_id = data["user_id"];
+                                    myApp.addNotification({
+                                        message: 'Pass Code Sent Successfully!',
+                                        closeIcon: false,
+                                        hold: 1000
+                                    });
+                                }
+                                if (res == "fail_re_attempt") {
+                                    preloader.off();
+                                    myApp.addNotification({
+                                        message: 'Re-attempting to Send Pass Code!',
+                                        closeIcon: false,
+                                        hold: 1000
+                                    });
+                                }
+
+                                //Standard Return Possibilities *** Do Not Alter *** START
+                                if (res == "insufficient_data" || res == "no_trigger_received") {
+                                    preloader.off();
+                                    myApp.addNotification({
+                                        message: 'Something went wrong! Try again!',
+                                        closeIcon: false,
+                                        hold: 2000
+                                    });
+                                }
+                                if (res == "server_error") {
+                                    preloader.off();
+                                    myApp.addNotification({
+                                        message: 'Server Error! Try again!',
+                                        closeIcon: false,
+                                        hold: 2000
+                                    });
+                                }
+                                //Standard Return Possibilities *** Do Not Alter *** END
+
+                                $("#txtPasscode").focus();
+                            },
+                            function (xhr, errorType, error) {
+                                console.log('Error Type: ' + errorType + ', Error: ' + error);
+                                preloader.off();
+                                myApp.closeModal();
+                                myApp.addNotification({
+                                    message: 'Something went wrong! Try again!',
+                                    closeIcon: false,
+                                    hold: 2000
+                                });
+                            }
+                        );
+
+
+                    });
+                });
+            }
+            
+            /***** Global Events *****/
 
             $("#txtPasscode").keypress(function () {
                 $("#boxtxtPasscode").css('border', '#ffffff');
+            });
+            
+            $('body').on('keypress', '#txtEmail', function () {
+                $("#boxtxtEmail").css('border', '#ffffff');
+            });
+
+            $("#reSendPassCode").click(function () {
+                alert("t");
             });
 
             $("#btnAuthenticate").click(function () {
@@ -117,7 +232,66 @@
 
                 if (validationCount == 2)
                 {
-                    
+                    localforage.getItem('user_id', function (err, user_id_value) {
+                        
+                        ajax('json', { trigger: 'verifyVCode', usertype: 'enduser' },
+                            { user_id: user_id_value, user_passcode: passcode },
+                            function (data) {
+
+                                var res = data["response"];
+
+                                if (res == "success") {
+                                    myApp.addNotification({
+                                        message: 'Passcode Verified Successfully!',
+                                        closeIcon: false,
+                                        hold: 1000,
+                                        onClose: function () {
+                                            window.location.href = "signup_stage_2.html";
+                                        }
+                                    });
+                                }
+                                if (res == "failed") {
+                                    preloader.off();
+                                    myApp.addNotification({
+                                        message: 'Invalid Passcode! Try again!',
+                                        closeIcon: false,
+                                        hold: 2000
+                                    });
+                                }
+
+                                //Standard Return Possibilities *** Do Not Alter *** START
+                                if (res == "insufficient_data" || res == "no_trigger_received") {
+                                    preloader.off();
+                                    myApp.addNotification({
+                                        message: 'Something went wrong! Try again!',
+                                        closeIcon: false,
+                                        hold: 2000
+                                    });
+                                }
+                                if (res == "server_error") {
+                                    preloader.off();
+                                    myApp.addNotification({
+                                        message: 'Server Error! Try again!',
+                                        closeIcon: false,
+                                        hold: 2000
+                                    });
+                                }
+                                //Standard Return Possibilities *** Do Not Alter *** END
+
+                            },
+                            function (xhr, errorType, error) {
+                                console.log('Error Type: ' + errorType + ', Error: ' + error);
+                                preloader.off();
+                                myApp.closeModal();
+                                myApp.addNotification({
+                                    message: 'Something went wrong! Try again!',
+                                    closeIcon: false,
+                                    hold: 2000
+                                });
+                            }
+                        );
+
+                    });
                 }
                 else
                 {
@@ -131,86 +305,133 @@
 
             });
 
-            localforage.getItem('user_id', function (err, user_id_value) {
-                localforage.getItem('user_email', function (err, user_email_value) {
-                    
-                    ajax('json', { trigger: '', usertype: 'enduser' },
-                        { email: user_email_value, user_id: user_id_value },
-                        function (data) {
-
-                            var res = data["response"];
-
-                            if (res == "success") {
-                                var user_id = data["user_id"];
-                                myApp.addNotification({
-                                    message: 'Pass Code Sent Successfully!',
-                                    closeIcon: false,
-                                    hold: 1000
-                                });
-                            }
-                            if (res == "fail_re_attempt") {
-                                preloader.off();
-                                myApp.addNotification({
-                                    message: 'Re-attempting to Send Pass Code!',
-                                    closeIcon: false,
-                                    hold: 1000
-                                });
-                            }
-
-                            //Standard Return Possibilities *** Do Not Alter *** START
-                            if (res == "insufficient_data" || res == "no_trigger_received") {
-                                preloader.off();
-                                myApp.addNotification({
-                                    message: 'Something went wrong! Try again!',
-                                    closeIcon: false,
-                                    hold: 2000
-                                });
-                            }
-                            if (res == "server_error") {
-                                preloader.off();
-                                myApp.addNotification({
-                                    message: 'Server Error! Try again!',
-                                    closeIcon: false,
-                                    hold: 2000
-                                });
-                            }
-                            //Standard Return Possibilities *** Do Not Alter *** END
-
-                            $("#txtPasscode").focus();
-                        },
-                        function (xhr, errorType, error) {
-                            console.log('Error Type: ' + errorType + ', Error: ' + error);
-                        }
-                    );
-
-                });
-            });
-
             $("#btnUpdateEmail").click(function () {
-            myApp.modal({
-                title: 'Change e-mail address',
-                text: "We'll re-send you the passcode to the updated e-mail address!",
-                afterText: "<form class='list-block inset inputs- list' style='margin-bottom: 0px; margin-top: 0px;'><ul><li>" +
-                "<div class='item-content'>" +
-                "<div class='item-inner' style='background-color: #fff;'>" +
-                "<div class='item-input item-input-field' id='boxtxtEmail' style='margin: auto;'>" +
-                "<input type='text' id='txtEmail' name='txtEmail' placeholder='E-Mail Address' style='font-size:18px; text-align: center; margin: auto;'/>" +
-                "</li></ul></div>" + "</div>" + "</div></form>",
-                buttons: [
-                    {
-                        text: 'Cancel',
-                        onClick: function () {
-                            myApp.alert('You clicked first button!')
-                        }
-                    },
-                    {
-                        text: 'Update',
-                        bold: true,
-                        onClick: function () {
-                            myApp.alert('You clicked third button!')
-                        }
-                    },
-                ]
+                myApp.modal({
+                    title: 'Change e-mail address',
+                    text: "We'll re-send you the passcode to the updated e-mail address!",
+                    afterText: "<form class='list-block inset inputs- list' style='margin-bottom: 0px; margin-top: 0px;'><ul><li>" +
+                    "<div class='item-content'>" +
+                    "<div class='item-inner' style='background-color: #fff;'>" +
+                    "<div class='item-input item-input-field' id='boxtxtEmail' style='margin: auto;'>" +
+                    "<input type='text' id='txtEmail' name='txtEmail' placeholder='E-Mail Address' style='font-size:18px; text-align: center; margin: auto;'/>" +
+                    "</div>" + "</div>" + "</div></li></ul></form>",
+                    buttons: [
+                        {
+                            text: 'Cancel',
+                            onClick: function () {
+                                myApp.closeModal();
+                            }
+                        },
+                        {
+                            text: 'Update',
+                            bold: true,
+                            close: false,
+                            onClick: function () {
+
+                                preloader.on();
+                                var validationCount = 0;
+                                var user_email_value = $("#txtEmail").val();
+
+                                if (required(user_email_value)) {
+                                    validationCount++;
+                                    $("#boxtxtEmail").css('border', '#ffffff');
+                                }
+                                else {
+                                    $("#boxtxtEmail").css('border', '#e27f7f solid');
+                                }
+
+                                if (isEmail(user_email_value)) {
+                                    validationCount++;
+                                    $("#boxtxtEmail").css('border', '#ffffff');
+                                }
+                                else {
+                                    $("#boxtxtEmail").css('border', '#e27f7f solid');
+                                }
+
+                                if (validationCount == 2) {
+
+                                    localforage.getItem('user_id', function (err, user_id_value) {
+                                        ajax('json', { trigger: 'updateEmailPreVerification', usertype: 'enduser' },
+                                            { user_email: user_email_value, user_id: user_id_value },
+                                            function (data) {
+
+                                                var res = data["response"];
+
+                                                if (res == "success") {
+                                                    preloader.off();
+                                                    localforage.setItem('user_email', user_email_value, function (err) {
+                                                        displayEmail();
+                                                        myApp.closeModal();
+                                                        myApp.addNotification({
+                                                            message: 'Pass Code Sent Successfully!',
+                                                            closeIcon: false,
+                                                            hold: 1000
+                                                        });
+                                                        $("#txtPasscode").focus();
+                                                    });
+                                                }
+                                                if (res == "fail_re_attempt") {
+                                                    preloader.off();
+                                                    myApp.addNotification({
+                                                        message: 'Re-attempting to Send Pass Code!',
+                                                        closeIcon: false,
+                                                        hold: 1000
+                                                    });
+                                                }
+                                                if (res == "email_exist") {
+                                                    preloader.off();
+                                                    myApp.addNotification({
+                                                        message: 'E-Mail ID Already Exists!',
+                                                        closeIcon: false,
+                                                        hold: 1000
+                                                    });
+                                                }
+
+                                                //Standard Return Possibilities *** Do Not Alter *** START
+                                                if (res == "insufficient_data" || res == "no_trigger_received") {
+                                                    preloader.off();
+                                                    myApp.closeModal();
+                                                    myApp.addNotification({
+                                                        message: 'Something went wrong! Try again!',
+                                                        closeIcon: false,
+                                                        hold: 2000
+                                                    });
+                                                }
+                                                if (res == "server_error") {
+                                                    preloader.off();
+                                                    myApp.closeModal();
+                                                    myApp.addNotification({
+                                                        message: 'Server Error! Try again!',
+                                                        closeIcon: false,
+                                                        hold: 2000
+                                                    });
+                                                }
+                                                //Standard Return Possibilities *** Do Not Alter *** END
+
+                                            },
+                                            function (xhr, errorType, error) {
+                                                console.log('Error Type: ' + errorType + ', Error: ' + error);
+                                                preloader.off();
+                                                myApp.closeModal();
+                                                myApp.addNotification({
+                                                    message: 'Something went wrong! Try again!',
+                                                    closeIcon: false,
+                                                    hold: 2000
+                                                });
+                                            }
+                                        );
+                                    });
+                                }
+                                else {
+                                    preloader.off();
+                                    myApp.addNotification({
+                                        message: 'Please enter a valid e-mail address!',
+                                        hold: 2000
+                                    });
+                                }
+                            }
+                        },
+                    ]
                 })
             });
         });
