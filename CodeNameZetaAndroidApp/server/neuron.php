@@ -4,8 +4,8 @@
 	require_once('mail.php');
 
 	//Drop Point - Handle Requests from Synapse (Defaults to no_trigger_received & neuron)
-    $userType = $_POST["usertype"] ?? 'neuron';
-	$trigger = $_POST["trigger"] ?? 'no_trigger_received';
+    $userType = $_POST["usertype"] ?? 'neuron';//neuron
+	$trigger = $_POST["trigger"] ?? 'no_trigger_received';//no_trigger_received
 	$requestInstance = new $userType();
 
 	if(method_exists($requestInstance,$trigger))
@@ -170,6 +170,10 @@
             parent::__construct();
 		}
 
+		function blank()
+		{
+		
+		}
 		function register()
 		{
             $res[] = array();
@@ -214,7 +218,7 @@
 
             if(!empty($_POST))
 			{
-                $email = $_POST['email'];
+                $email = $_POST['user_email'];
                 $user_id = $_POST['user_id'];
                 $vcode = parent::vcode();
 
@@ -251,15 +255,24 @@
             if(!empty($_POST))
 			{
 				$user_id = $_POST['user_id'];
+				$user_passcode = $_POST['user_passcode'];
 
                 $result = parent::callSPRead('e_getVcode',$user_id);
 				while ($row = $result->fetch_object())
 				{
-					$output = $row->vcode;
+					$output = $row->output;
 				}
-				if($_POST['passcode'] == $output)
+				if($user_passcode == $output)
 				{
-					$res['response'] = "success";
+					$result = parent::callSPRead('e_setStage',$user_id,'2');
+					while ($row = $result->fetch_object())
+					{
+						$output = $row->output;
+					}
+					if($output == "success")
+					{
+						$res['response'] = "success";
+					}
 				}
 				else
 				{
@@ -298,8 +311,9 @@
 			{
 				$user_id = $_POST['user_id'];
 				$user_email = $_POST['user_email'];
+				$enc_email = base64_encode(str_rot13(filter_var($_POST['user_email'], FILTER_SANITIZE_EMAIL)));
 
-				$result = parent::callSPRead('e_emailExist',$user_email);
+				$result = parent::callSPRead('e_emailExist',$enc_email);
 				while ($row = $result->fetch_object())
 				{
 					$output = $row->output;
@@ -312,7 +326,7 @@
 				{
 					$vcode = parent::vcode();
 
-					$result = parent::callSPRead('e_changeEmail',$user_id,$user_email);
+					$result = parent::callSPRead('e_changeEmail',$user_id,$enc_email);
 					while ($row = $result->fetch_object())
 					{
 						$output = $row->output;
@@ -328,13 +342,90 @@
 						{
 							$subject = "UniPortal Account Verification";
 							$message="<title></title><div><span style=font-size:14px>Hello,</span></div><div> </div><div style=text-align:justify><span style=font-size:14px>This email address has been signed up to UniPortal. We would like to verify that you are the person who has signed up for the same, therefore please verify yourself by entering the following 4-digit verification code in the website or application:</span></div><div> </div><div><span style=font-size:14px>Verification Code: ".$vcode."</span></div><div> </div><div><span style=font-size:14px>Regards,</span></div><div><span style=font-size:14px>UniPortal</span></div><div><span style=font-size:14px>Team HexAxle</span></div>";
-							parent::sendmail($email,$subject,$message);
+							parent::sendmail($user_email,$subject,$message);
 							$res['response'] = "success";
 						}
 						else
 						{
 							$res['response'] = "fail_re_attempt";
 						}
+					}
+				}
+			}
+            else
+            {
+                $res['response'] = "insufficient_data";
+            }
+
+			parent::sendResponse(json_encode($res));
+		}
+
+		function genderYob()
+		{
+			$res[] = array();
+
+            if(!empty($_POST))
+			{
+				$user_id = $_POST['user_id'];
+				$user_gender = $_POST['user_gender'];
+				$user_yob = $_POST['user_yob'];
+
+				$result = parent::callSPRead('e_setUserGenderYob',$user_id,$user_gender,$user_yob);
+				while ($row = $result->fetch_object())
+				{
+					$output = $row->output;
+				}
+				if($output == "success")
+				{
+					$result = parent::callSPRead('e_setStage',$user_id,'3');
+					while ($row = $result->fetch_object())
+					{
+						$output = $row->output;
+					}
+					if($output == "success")
+					{
+						$res['response'] = "success";
+					}
+				}
+			}
+            else
+            {
+                $res['response'] = "insufficient_data";
+            }
+
+			parent::sendResponse(json_encode($res));
+		}
+
+		function professionLocation()
+		{
+			$res[] = array();
+
+            if(!empty($_POST))
+			{
+				$user_id = $_POST['user_id'];
+				$user_profession = $_POST['user_profession'];
+				$user_location = $_POST['user_location'];
+				$loc = array();
+				$loc = explode(",",$user_location);
+				$user_city = $loc[0];
+				$user_state = $loc[1];
+				$user_country = $loc[2];
+				
+				$result = parent::callSPRead('e_setuserProfessionLocation',$user_id,$user_profession,$user_city,$user_state,$user_country);
+				while ($row = $result->fetch_object())
+				{
+					$output = $row->output;
+				}
+				if($output == "success")
+				{
+					$result = parent::callSPRead('e_setStage',$user_id,'4');
+					while ($row = $result->fetch_object())
+					{
+						$output = $row->output;
+					}
+					if($output == "success")
+					{
+						$res['response'] = "success";
 					}
 				}
 			}
