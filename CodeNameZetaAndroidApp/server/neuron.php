@@ -250,18 +250,101 @@
 
             if(!empty($_POST))
 			{
-                $result = parent::callSPRead('e_getVcode',$_POST['userID']);
+				$user_id = $_POST['user_id'];
+
+                $result = parent::callSPRead('e_getVcode',$user_id);
 				while ($row = $result->fetch_object())
 				{
-					//$output = $row->;
+					$output = $row->vcode;
+				}
+				if($_POST['passcode'] == $output)
+				{
+					$res['response'] = "success";
+				}
+				else
+				{
+					$res['response'] = "failed";
 				}
             }
             else
             {
                 $res['response'] = "insufficient_data";
-				parent::sendResponse(json_encode($res));
             }
+
+			parent::sendResponse(json_encode($res));
         }
+
+		function updateEmailPostVerification()
+		{
+			$res[] = array();
+
+            if(!empty($_POST))
+			{
+				
+			}
+            else
+            {
+                $res['response'] = "insufficient_data";
+            }
+
+			parent::sendResponse(json_encode($res));
+		}
+
+		function updateEmailPreVerification()
+		{
+			$res[] = array();
+
+            if(!empty($_POST))
+			{
+				$user_id = $_POST['user_id'];
+				$user_email = $_POST['user_email'];
+
+				$result = parent::callSPRead('e_emailExist',$user_email);
+				while ($row = $result->fetch_object())
+				{
+					$output = $row->output;
+				}
+				if($output == "yes")
+				{
+					$res['response'] = "email_exist";
+				}
+				if($output == "no")
+				{
+					$vcode = parent::vcode();
+
+					$result = parent::callSPRead('e_changeEmail',$user_id,$user_email);
+					while ($row = $result->fetch_object())
+					{
+						$output = $row->output;
+					}
+					if($output == "success")
+					{
+						$result = parent::callSPRead('e_setVcode',$user_id,$vcode);
+						while ($row = $result->fetch_object())
+						{
+							$output = $row->output;
+						}
+						if($output=="updated")
+						{
+							$subject = "UniPortal Account Verification";
+							$message="<title></title><div><span style=font-size:14px>Hello,</span></div><div> </div><div style=text-align:justify><span style=font-size:14px>This email address has been signed up to UniPortal. We would like to verify that you are the person who has signed up for the same, therefore please verify yourself by entering the following 4-digit verification code in the website or application:</span></div><div> </div><div><span style=font-size:14px>Verification Code: ".$vcode."</span></div><div> </div><div><span style=font-size:14px>Regards,</span></div><div><span style=font-size:14px>UniPortal</span></div><div><span style=font-size:14px>Team HexAxle</span></div>";
+							parent::sendmail($email,$subject,$message);
+							$res['response'] = "success";
+						}
+						else
+						{
+							$res['response'] = "fail_re_attempt";
+						}
+					}
+				}
+			}
+            else
+            {
+                $res['response'] = "insufficient_data";
+            }
+
+			parent::sendResponse(json_encode($res));
+		}
 	}
 
 	class admin extends neuron
