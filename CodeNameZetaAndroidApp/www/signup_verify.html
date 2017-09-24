@@ -184,12 +184,13 @@
             $("#btnUpdateEmail").click(function () {
             myApp.modal({
                 title: 'Change e-mail address',
-                text: "You can update your e-mail address here and we'll re-send you the passcode!",
-                afterText: "<div class='item-content'>"+
-                            "<div class='item-inner' >"+
-                            "<div class='item-input item-input-field' id='boxtxtEmail' style='margin: auto;'>"+
-                        "<input type='text' id='txtEmail' name='txtEmail' placeholder='E-Mail Address' style='font-size:18px; text-align: center; margin: auto;'>"+
-                        "</div>"+"</div>"+"</div>",
+                text: "We'll re-send you the passcode to the updated e-mail address!",
+                afterText: "<form class='list-block inset inputs- list' style='margin-bottom: 0px; margin-top: 0px;'><ul><li>" +
+                "<div class='item-content'>" +
+                "<div class='item-inner' style='background-color: #fff;'>" +
+                "<div class='item-input item-input-field' id='boxtxtEmail' style='margin: auto;'>" +
+                "<input type='text' id='txtEmail' name='txtEmail' placeholder='E-Mail Address' style='font-size:18px; text-align: center; margin: auto;'/>" +
+                "</li></ul></div>" + "</div>" + "</div></form>",
                 buttons: [
                     {
                         text: 'Cancel',
