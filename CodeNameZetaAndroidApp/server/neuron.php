@@ -7,7 +7,16 @@
     $userType = $_POST["usertype"] ?? 'neuron';
 	$trigger = $_POST["trigger"] ?? 'no_trigger_received';
 	$requestInstance = new $userType();
-	$requestInstance->$trigger();
+
+	if(method_exists($requestInstance,$trigger))
+    {
+        $requestInstance->$trigger();
+    }
+    else
+    {
+        $errInstance = new neuron();
+        $errInstance->logError($userType,'Not Applicable',"Method does not exist: ".$trigger);
+    }
 
 	//Neuron Class
 	class neuron

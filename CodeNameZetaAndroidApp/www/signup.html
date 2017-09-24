@@ -47,7 +47,7 @@
                     <div class="page-content">
                         <div class="overlay-load"></div>
                         <div class="content-block-title" style="padding: 0px;font-weight:800;font-size: 22px;overflow: visible;text-align: center;">Sign Up</div>
-                        <form data-parsley-validate class="list-block inputs-list" style="margin-bottom: 12px;">
+                        <form class="list-block inputs-list" style="margin-bottom: 12px;">
                             <ul>
                                 <li>
                                     <div class="item-content">
@@ -127,17 +127,7 @@
         <script>
             $(document).ready(function () {
                
-                preloader = new $.materialPreloader({
-                    position: 'top',
-                    height: '8px',
-                    col_1: '#000000',
-                    col_2: '#cccccc',
-                    col_3: '#e5e5e5',
-                    col_4: '#999999',
-                    fadeIn: 1,
-                    fadeOut: 1
-                });
-
+                preloaderInit();
                 preloader.off();
 
                 $("#userName").focus(function () {
@@ -309,23 +299,108 @@
                         preloader.off();
                         myApp.addNotification({
                             message: 'Please check highlighted fields!',
-                            hold: 20000
+                            hold: 2000
                         });
                     }
                 });
 
                 $("#ssoGoogle").click(function () {
-                    window.plugins.googleplus.login(
-                        {},
-                        function (obj) {
-                            alert("Hi, " + obj.displayName + ", " + obj.email);
+
+                    window.plugins.googleplus.disconnect(
+                        function (msg) {
+                            loginSSO();
                         },
                         function (msg) {
-                            alert("error: " + msg);
+                            loginSSO();
                         }
                     );
                 });
             });
+
+            function loginSSO()
+            {
+                window.plugins.googleplus.login(
+                    {},
+                    function (obj) {
+
+                        var loginType = "sso";
+
+                        preloader.on();
+                        ajax('json', { trigger: 'register', usertype: 'enduser' },
+                            { name: obj.displayName, email: obj.email, password: 'sa', loginType: loginType },
+                            function (data) {
+                                var res = data["response"];
+                                if (res == "success") {
+                                    var user_id = data["user_id"];
+                                    localforage.setItem('user_id', user_id, function (err) {
+                                        localforage.setItem('user_stage', '2', function (err) {
+                                            localforage.setItem('user_name', obj.displayName, function (err) {
+                                                localforage.setItem('user_email', obj.email, function (err) {
+                                                    localforage.setItem('user_loginType', loginType, function (err) {
+                                                        window.location.href = "signup_stage_2.html";
+                                                    });
+                                                });
+                                            });
+                                        });
+                                    });
+                                }
+                                if (res == "normal_exist") {
+                                    preloader.off();
+                                    myApp.addNotification({
+                                        message: 'Email-ID already exists!',
+                                        button: {
+                                            text: 'Sign In',
+                                            color: 'lightgreen',
+                                            close: true
+                                        },
+                                        onClose: function () {
+                                            window.location.href = "login.html";
+                                        }
+                                    });
+                                }
+                                if (res == "sso_exist") {
+                                    preloader.off();
+                                    myApp.addNotification({
+                                        message: 'Email-ID already exists!',
+                                        button: {
+                                            text: 'Forgot Password?',
+                                            color: 'lightgreen',
+                                            close: true
+                                        },
+                                        onClose: function () {
+                                            //window.location.href = "signup_verify.html";
+                                        }
+                                    });
+                                }
+                                if (res == "insufficient_data" || res == "no_trigger_received") {
+                                    preloader.off();
+                                    myApp.addNotification({
+                                        message: 'Something went wrong! Try again!',
+                                        closeIcon: false,
+                                        hold: 2000
+                                    });
+                                }
+                                if (res == "server_error") {
+                                    preloader.off();
+                                    myApp.addNotification({
+                                        message: 'Server Error! Try again!',
+                                        closeIcon: false,
+                                        hold: 2000
+                                    });
+                                }
+                            },
+                            function (xhr, errorType, error) {
+                                console.log('Error Type: ' + errorType + ', Error: ' + error);
+                            }
+                        );
+
+
+                    },
+                    function (msg) {
+                        //
+                    }
+                );
+            }
         </script>
 </body>
 </html>

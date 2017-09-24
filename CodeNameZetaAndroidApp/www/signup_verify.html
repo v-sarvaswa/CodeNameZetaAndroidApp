@@ -14,13 +14,12 @@
     <link href="http://fonts.googleapis.com/css?family=Roboto:400,300,500,700" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="css/material-icons.css">
     <link rel="stylesheet" href="css/kitchen-sink.css">
+    <link rel="stylesheet" href="css/materialPreloader.css">
+    <link rel="stylesheet" href="css/sso.css">
     <link rel="icon" href="img/icon.png">
     <script type="text/javascript" src="js/localforage.min.js"></script>
     <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
-    <script type="text/javascript" src="js/synapse.js"></script>
-    <script>
-        
-    </script>
+    <script type="text/javascript" src="js/materialPreloader.min.js"></script>
 </head>
 <body class="theme-black">
     <div class="statusbar-overlay"></div>
@@ -37,6 +36,7 @@
                             </div>
                         </div>
                         <div class="page-content" style="text-align:center;">
+                            <div class="overlay-load"></div>
                             <div class="content-block-title" style="padding: 0px;font-weight:800;font-size: 22px;overflow: visible;text-align: center;">Verify Its You!</div>
                             <img src="img/email.png" style="margin:auto; width: 40%;"/>
                             <p style="text-align:justify; padding: 15px;font-size: 18px;margin: 0;">
@@ -50,8 +50,8 @@
                                     <li>
                                         <div class="item-content">
                                             <div class="item-inner">
-                                                <div class="item-input item-input-field" style="width: 50%; margin: auto;">
-                                                    <input type="password" placeholder="4 Digit Passcode" class="" maxlength="4" style="font-size:20px; text-align: center; margin: auto;" autofocus>
+                                                <div class="item-input item-input-field" id="boxtxtPasscode" style="width: 60%; margin: auto;">
+                                                    <input type="number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" id="txtPasscode" name="txtPasscode" placeholder="4 Digit Passcode" class="" maxlength="4" style="font-size:20px; text-align: center; margin: auto;" autofocus>
                                                 </div>
                                             </div>
                                         </div>
@@ -59,22 +59,156 @@
                                 </ul>
 
                                 <div class="content-block center" style="margin: 20px 0;">
-                                    <a href="signup_stage_2.html" class="button button-fill button-raised color-black center external" style="width:50%; margin:auto;">Authenticate</a>
-                                    <br/><br />
+                                    <a href="#" id="btnAuthenticate" class="button button-fill button-raised color-black center external" style="width:50%; margin:auto;">Authenticate</a>
+                                    <br/>
                                     <span style="vertical-align:middle; font-size:18px;">Haven't received yet? </span><a href="#" class="external center" style="margin: 10px auto; color: #000000;text-decoration:underline; vertical-align:middle; font-size:18px; font-weight:800; line-height: 19px;">Re-send</a>
+                                    <br />
+                                    <span style="vertical-align:middle; font-size:18px;">Wrong e-mail address? </span><a href="#" id="btnUpdateEmail" class="external center" style="margin: 10px auto; color: #000000;text-decoration:underline; vertical-align:middle; font-size:18px; font-weight:800; line-height: 19px;">Update</a>
                                 </div>
                             </form>
-                           
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" data-main="scripts/startup" src="lib/require.2.1.8.js" async></script>
+        <script type="text/javascript" src="js/framework7.js"></script>
+        <script type="text/javascript" src="js/my-app.js"></script>
+        <script type="text/javascript" src="js/synapse.js"></script>
 
-    <script type="text/javascript" src="cordova.js"></script>
-    <script type="text/javascript" data-main="scripts/startup" src="lib/require.2.1.8.js" async></script>
-    <script type="text/javascript" src="js/framework7.js"></script>
-    <script type="text/javascript" src="js/kitchen-sink.js"></script>
-    <script type="text/javascript" src="js/my-app.js"></script>
+    <script>
+
+        $(document).ready(function () {
+
+            preloaderInit();
+            preloader.off();
+
+            $("#txtPasscode").keypress(function () {
+                $("#boxtxtPasscode").css('border', '#ffffff');
+            });
+
+            $("#btnAuthenticate").click(function () {
+
+                preloader.on();
+                var validationCount = 0;
+                var passcode = $("#txtPasscode").val();
+
+                if (required(passcode)) {
+                    validationCount++;
+                    $("#boxtxtPasscode").css('border', '#ffffff');
+                }
+                else {
+                    $("#boxtxtPasscode").css('border', '#e27f7f solid');
+                }
+
+                if (passcode.length == 4) {
+                    validationCount++;
+                    $("#boxtxtPasscode").css('border', '#ffffff');
+                }
+                else {
+                    $("#boxtxtPasscode").css('border', '#e27f7f solid');
+                }
+
+                if (validationCount == 2) {
+                    
+                }
+                else
+                {
+                    preloader.off();
+                    $("#txtPasscode").focus();
+                    myApp.addNotification({
+                        message: 'Please enter a valid pass code!',
+                        hold: 2000
+                    });
+                }
+
+            });
+
+            localforage.getItem('user_id', function (err, user_id_value) {
+                localforage.getItem('user_email', function (err, user_email_value) {
+                    
+                    ajax('json', { trigger: '', usertype: 'enduser' },
+                        { email: user_email_value, user_id: user_id_value },
+                        function (data) {
+
+                            var res = data["response"];
+
+                            if (res == "success") {
+                                var user_id = data["user_id"];
+                                myApp.addNotification({
+                                    message: 'Pass Code Sent Successfully!',
+                                    closeIcon: false,
+                                    hold: 1000
+                                });
+                            }
+                            if (res == "fail_re_attempt") {
+                                preloader.off();
+                                myApp.addNotification({
+                                    message: 'Re-attempting to Send Pass Code!',
+                                    closeIcon: false,
+                                    hold: 1000
+                                });
+                            }
+
+                            //Standard Return Possibilities *** Do Not Alter *** START
+                            if (res == "insufficient_data" || res == "no_trigger_received") {
+                                preloader.off();
+                                myApp.addNotification({
+                                    message: 'Something went wrong! Try again!',
+                                    closeIcon: false,
+                                    hold: 2000
+                                });
+                            }
+                            if (res == "server_error") {
+                                preloader.off();
+                                myApp.addNotification({
+                                    message: 'Server Error! Try again!',
+                                    closeIcon: false,
+                                    hold: 2000
+                                });
+                            }
+                            //Standard Return Possibilities *** Do Not Alter *** END
+
+                            $("#txtPasscode").focus();
+                        },
+                        function (xhr, errorType, error) {
+                            console.log('Error Type: ' + errorType + ', Error: ' + error);
+                        }
+                    );
+
+                });
+            });
+
+            $("#btnUpdateEmail").click(function () {
+            myApp.modal({
+                title: 'Change e-mail address',
+                text: "You can update your e-mail address here and we'll re-send you the passcode!",
+                afterText: "<div class='item-content'>"+
+                            "<div class='item-inner' >"+
+                            "<div class='item-input item-input-field' id='boxtxtEmail' style='margin: auto;'>"+
+                        "<input type='text' id='txtEmail' name='txtEmail' placeholder='E-Mail Address' style='font-size:18px; text-align: center; margin: auto;'>"+
+                        "</div>"+"</div>"+"</div>",
+                buttons: [
+                    {
+                        text: 'Cancel',
+                        onClick: function () {
+                            myApp.alert('You clicked first button!')
+                        }
+                    },
+                    {
+                        text: 'Update',
+                        bold: true,
+                        onClick: function () {
+                            myApp.alert('You clicked third button!')
+                        }
+                    },
+                ]
+                })
+            });
+        });
+    </script>
+
 </body>
 </html>

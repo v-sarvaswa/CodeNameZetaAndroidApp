@@ -1,4 +1,4 @@
-/************************************************************************
+﻿/************************************************************************
 Synapse v1.0
 
 ************************************************************************/
@@ -72,21 +72,6 @@ function passwordCheck(pwd, confirmpwd)
     return expr;
 }
 
-//PreLoader 
-function preloaderInit()
-{
-    preloader = new $.materialPreloader({
-        position: 'top',
-        height: '8px',
-        col_1: '#000000',
-        col_2: '#cccccc',
-        col_3: '#e5e5e5',
-        col_4: '#999999',
-        fadeIn: 1,
-        fadeOut: 1
-    });
-}
-
 function trySilentLogin() {
     window.plugins.googleplus.trySilentLogin(
         {},
@@ -101,6 +86,18 @@ function trySilentLogin() {
 
 function logout() {
     window.plugins.googleplus.logout(
+        function (msg) {
+            document.querySelector("#image").style.visibility = 'hidden';
+            document.querySelector("#feedback").innerHTML = msg;
+        },
+        function (msg) {
+            document.querySelector("#feedback").innerHTML = msg;
+        }
+    );
+}
+
+function disconnect() {
+    window.plugins.googleplus.disconnect(
         function (msg) {
             document.querySelector("#image").style.visibility = 'hidden';
             document.querySelector("#feedback").innerHTML = msg;
