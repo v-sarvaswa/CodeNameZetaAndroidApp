@@ -95,23 +95,28 @@
                 var validationCount = 0;
                 var passcode = $("#txtPasscode").val();
 
-                if (required(passcode)) {
+                if (required(passcode))
+                {
                     validationCount++;
                     $("#boxtxtPasscode").css('border', '#ffffff');
                 }
-                else {
+                else
+                {
                     $("#boxtxtPasscode").css('border', '#e27f7f solid');
                 }
 
-                if (passcode.length == 4) {
+                if (passcode.length == 4)
+                {
                     validationCount++;
                     $("#boxtxtPasscode").css('border', '#ffffff');
                 }
-                else {
+                else
+                {
                     $("#boxtxtPasscode").css('border', '#e27f7f solid');
                 }
 
-                if (validationCount == 2) {
+                if (validationCount == 2)
+                {
                     
                 }
                 else

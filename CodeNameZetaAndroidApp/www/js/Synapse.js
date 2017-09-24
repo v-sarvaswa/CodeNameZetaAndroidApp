@@ -1,4 +1,4 @@
-/************************************************************************
+﻿/************************************************************************
 Synapse v1.0
 
 ************************************************************************/
@@ -23,58 +23,47 @@ function ajax(datatype, neuron, parameters, callback, error) {
     })
 }
 ///Email validation
-function isEmail(email)
-{
+function isEmail(email) {
     var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
     return regex.test(email);
 }
 
 ///Required Field validation
-function required(input)
-{
+function required(input) {
     var expr;
-    if (input.trim() == "")
-    {
+    if (input.trim() == "") {
         expr = false;
     }
-    else
-    {
+    else {
         expr = true;
     }
     return expr;
 }
 //Min length validation
-function passwordRequiredLength(pwd, len)
-{
+function passwordRequiredLength(pwd, len) {
     var expr;
-    if (pwd.trim().length >= len)
-    {
+    if (pwd.trim().length >= len) {
         expr = true;
     }
-    else
-    {
+    else {
         expr = false;
     }
     return expr;
 }
 //check two passwords are same or not
-function passwordCheck(pwd, confirmpwd)
-{
+function passwordCheck(pwd, confirmpwd) {
     var expr;
-    if (pwd.trim() == confirmpwd.trim())
-    {
+    if (pwd.trim() == confirmpwd.trim()) {
         expr = true;
     }
-    else
-    {
+    else {
         expr = false;
     }
     return expr;
 }
 
 //PreLoader 
-function preloaderInit()
-{
+function preloaderInit() {
     preloader = new $.materialPreloader({
         position: 'top',
         height: '8px',
